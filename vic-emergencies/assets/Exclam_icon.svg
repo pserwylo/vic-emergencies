@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="200"
+   height="180"
+   stroke-linejoin="round"
+   id="svg3116"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="Exclam_icon.svg">
+  <metadata
+     id="metadata3130">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs3128" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="480"
+     id="namedview3126"
+     showgrid="false"
+     inkscape:zoom="1.3111111"
+     inkscape:cx="100"
+     inkscape:cy="90"
+     inkscape:window-x="0"
+     inkscape:window-y="31"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3116" />
+  <g
+     id="g3132">
+    <path
+       id="path3118"
+       d="M99,18 15,162H183z"
+       stroke-width="25"
+       stroke="#DDD" />
+    <path
+       id="path3120"
+       d="M99,18 15,162H183z"
+       fill="#FFF"
+       stroke-width="17"
+       stroke="#C00" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3122"
+       d="m 90.67098,69.344966 a 9,9 0 1 1 17.94216,1.441809 l -8.98896,49.438835" />
+    <circle
+       id="circle3124"
+       r="9"
+       cy="138"
+       cx="100" />
+  </g>
+</svg>
