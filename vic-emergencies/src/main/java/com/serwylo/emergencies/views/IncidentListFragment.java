@@ -34,12 +34,16 @@ public class IncidentListFragment extends ListFragment implements AdapterView.On
 		mapFragment = (IncidentMapFragment)getActivity().getSupportFragmentManager().findFragmentById( R.id.incident_map );
 
 		try {
-			AsyncTask<Void, Void, List<Incident>> task = new IncidentLoader().execute();
-			incidents = task.get();
-			if ( incidents != null ) {
-				Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
-				setListAdapter( new IncidentAdapter( getActivity(), incidents ) );
-			}
+			new IncidentLoader( getActivity() ) {
+				@Override
+				public void onPostExecute( List<Incident> result ) {
+					incidents = result;
+					if ( incidents != null ) {
+						Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
+						setListAdapter( new IncidentAdapter( getActivity(), incidents ) );
+					}
+				}
+			}.execute();
 		} catch ( Exception e ) {
 			Log.e( "Incidents", e.getMessage() );
 		}

@@ -14,6 +14,7 @@ import com.serwylo.emergencies.R;
 import com.serwylo.emergencies.data.Incident;
 import com.serwylo.emergencies.data.Location;
 import com.serwylo.emergencies.data.SeverityComparator;
+import com.serwylo.emergencies.views.adapters.IncidentAdapter;
 import com.serwylo.emergencies.views.utils.IncidentLoader;
 
 import org.osmdroid.DefaultResourceProxyImpl;
@@ -66,23 +67,23 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 		map.setBuiltInZoomControls( true );
 		map.setMapListener( this );
 
-		incidents = null;
-		try {
-			AsyncTask<Void, Void, List<Incident>> task = new IncidentLoader().execute();
-			incidents = task.get();
-
-			if ( incidents != null ) {
-				Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
-			}
-
-		} catch ( Exception e ) { }
-
 		currentIconSize = getPreferredIconSize();
-
 		ResourceProxy resourceProxy = new DefaultResourceProxyImpl(getActivity());
 		overlay = new ItemizedIconOverlay<OverlayItem>( new ArrayList<OverlayItem>(), this, resourceProxy );
-		overlay.addItems(createItemOverlays());
 		map.getOverlayManager().add( overlay );
+
+		incidents = null;
+		new IncidentLoader( getActivity() ) {
+			@Override
+			public void onPostExecute( List<Incident> result ) {
+				incidents = result;
+				if ( incidents != null ) {
+					Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
+					overlay.addItems( createItemOverlays() );
+				}
+			}
+		}.execute();
+
 		return view;
 
 	}
