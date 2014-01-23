@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="6dp">
+
+    <TextView
+        android:id="@+id/text_emergency_radio_stations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/btn_call_000"
+        android:textSize="18sp"
+        android:padding="6dp"
+        android:text="Emergency Radio Stations"
+        android:textColor="@color/heading"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_emergency_radio_stations"
+        android:text="If you have access to an AM, FM or Digital radio, tune in to your local emergency broadcaster for emergency updates."
+        android:id="@+id/text_emergency_radio_stations_details"/>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_emergency_radio_stations_details"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

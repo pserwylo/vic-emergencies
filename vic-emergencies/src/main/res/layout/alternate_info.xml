@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/fragment_phone_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.serwylo.emergencies.views.EmergencyPhoneFragment"
+            tools:layout="@layout/fragment_emergency_phone_details" android:layout_alignParentTop="true"/>
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.serwylo.emergencies.views.EmergencyRadioFragment"
+            tools:layout="@layout/fragment_emergency_radio_details"
+            android:layout_below="@+id/fragment_phone_details" android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.serwylo.emergencies" >
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,13 +15,13 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat"
         android:uiOptions="splitActionBarWhenNarrow" >
-
         <activity
-            android:name=".IncidentsActivity"
+            android:name="com.serwylo.emergencies.IncidentsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name">
-
-            <meta-data android:name="android.support.UI_OPTIONS" android:value="splitActionBarWhenNarrow" />
+            android:label="@string/app_name" >
+            <meta-data
+                android:name="android.support.UI_OPTIONS"
+                android:value="splitActionBarWhenNarrow" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +29,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="com.serwylo.emergencies.AlternateInfoActivity"
+            android:label="@string/title_activity_alternate_info" >
+        </activity>
     </application>
 
 </manifest>
