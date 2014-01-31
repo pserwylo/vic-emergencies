@@ -1,13 +1,12 @@
-package com.serwylo.emergencies.views.utils;
+package com.serwylo.emergencies.data;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.serwylo.emergencies.PrefHelper;
-import com.serwylo.emergencies.data.Incident;
+import com.serwylo.emergencies.data.*;
 
-import com.serwylo.emergencies.data.SeverityComparator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -138,21 +136,22 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
             }
         }
 
-		PrefHelper helper = new PrefHelper( context );
-		List<Incident> filteredIncidents = new ArrayList<Incident>( incidents.size() );
-		for ( Incident incident : incidents ) {
-			boolean include = true;
-			if ( !helper.showNswIncidents() && incident.getState().equals( "NSW" ) ) {
-				include = false;
-			} else if ( !helper.showSaIncidents() && incident.getState().equals( "SA" ) ) {
-				include = false;
-			}
-			if ( include )
-				filteredIncidents.add( incident );
-		}
-		Collections.sort( filteredIncidents, Collections.reverseOrder( new SeverityComparator() ) );
-		return filteredIncidents;
+		filterIncidents( incidents );
+		Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
+		return incidents;
 
+	}
+
+	private static void filterIncidents( List<Incident> incidents ) {
+		List<String> validStates = new ArrayList<String>( 3 );
+		validStates.add( Incident.STATE_VIC );
+		if ( PrefHelper.get().showNswIncidents() ) {
+			validStates.add( Incident.STATE_NSW );
+		}
+		if ( PrefHelper.get().showSaIncidents() ) {
+			validStates.add( Incident.STATE_SA );
+		}
+		IncidentFilter.filter( incidents, new StateFilter( validStates ) );
 	}
 
     private static class Cache {

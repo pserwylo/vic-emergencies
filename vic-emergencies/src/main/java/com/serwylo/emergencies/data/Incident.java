@@ -8,15 +8,17 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Incident {
 
 	public static final String TYPE_WARNING = "Warning";
 
-    private long id;
+	public static final String STATE_VIC    = "VIC";
+	public static final String STATE_NSW    = "NSW";
+	public static final String STATE_SA     = "SA";
+
+	private long id;
     private String type;
     private String name;
     private String status;

@@ -3,7 +3,6 @@ package com.serwylo.emergencies.views;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.view.View;
 import android.webkit.WebView;
 
 import com.serwylo.emergencies.data.Incident;

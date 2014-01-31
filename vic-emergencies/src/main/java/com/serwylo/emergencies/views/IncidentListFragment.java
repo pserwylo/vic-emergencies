@@ -1,23 +1,14 @@
 package com.serwylo.emergencies.views;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.ListFragment;
-import android.util.Log;
-import android.view.View;
-import android.webkit.WebView;
-import android.widget.AdapterView;
+import android.os.*;
+import android.support.v4.app.*;
+import android.view.*;
+import android.widget.*;
+import com.serwylo.emergencies.*;
+import com.serwylo.emergencies.data.*;
+import com.serwylo.emergencies.views.adapters.*;
 
-import com.serwylo.emergencies.R;
-import com.serwylo.emergencies.data.Incident;
-import com.serwylo.emergencies.data.SeverityComparator;
-import com.serwylo.emergencies.views.adapters.IncidentAdapter;
-import com.serwylo.emergencies.views.utils.IncidentLoader;
-
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class IncidentListFragment extends ListFragment implements AdapterView.OnItemClickListener {
 
@@ -28,22 +19,8 @@ public class IncidentListFragment extends ListFragment implements AdapterView.On
 	public void onActivityCreated(Bundle savedInstanceState) {
 
 		super.onActivityCreated( savedInstanceState );
-
 		setHasOptionsMenu( true );
-
 		mapFragment = (IncidentMapFragment)getActivity().getSupportFragmentManager().findFragmentById( R.id.incident_map );
-
-		try {
-			new IncidentLoader( getActivity() ) {
-				@Override
-				public void onPostExecute( List<Incident> result ) {
-					setIncidentList( result );
-				}
-			}.execute();
-		} catch ( Exception e ) {
-			Log.e( "Incidents", e.getMessage() );
-		}
-
 		getListView().setOnItemClickListener( this );
 	}
 

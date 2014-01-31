@@ -4,20 +4,20 @@
         android:title="Other states">
 
         <CheckBoxPreference
-            android:key="show_nsw"
+            android:key="showNsw"
             android:title="NSW Incidents"
             android:summary="Show incidents from NSW?"
             android:summaryOn="Showing NSW incidents"
             android:summaryOff="Not showing NSW incidents"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
         <CheckBoxPreference
-            android:key="show_sa"
+            android:key="showSa"
             android:title="SA Incidents"
             android:summary="Show incidents from SA?"
             android:summaryOn="Showing SA incidents"
             android:summaryOff="Not showing SA incidents"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 

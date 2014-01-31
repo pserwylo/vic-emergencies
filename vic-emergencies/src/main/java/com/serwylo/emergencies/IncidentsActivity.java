@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -12,23 +11,25 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
-import android.widget.Toast;
 import com.serwylo.emergencies.data.Incident;
-import com.serwylo.emergencies.data.SeverityComparator;
 import com.serwylo.emergencies.views.IncidentListFragment;
 import com.serwylo.emergencies.views.IncidentMapFragment;
-import com.serwylo.emergencies.views.utils.IncidentLoader;
+import com.serwylo.emergencies.data.IncidentLoader;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class IncidentsActivity extends ActionBarActivity {
 
 	private IncidentMapFragment mapFragment = null;
 	private IncidentListFragment listFragment = null;
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		refreshLists();
+	}
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
@@ -73,32 +74,36 @@ public class IncidentsActivity extends ActionBarActivity {
 
 	}
 
-    private void refreshCache() {
-
-        if ( mapFragment != null ) {
-            mapFragment.setIncidentList(new ArrayList<Incident>(0));
-        }
-
-        if ( listFragment != null ) {
-            listFragment.setIncidentList(new ArrayList<Incident>(0));
-        }
-
-        new IncidentLoader( this, true ) {
-            @Override
-            public void onPostExecute( List<Incident> result ) {
-                if (mapFragment != null) {
-                    mapFragment.setIncidentList( result );
-                }
-                if (listFragment != null) {
-                    listFragment.setIncidentList( result );
-                }
-                Toast.makeText(
-                    IncidentsActivity.this,
-                    "Refreshed list of incidents from www.emergency.vic.gov.au",
-                    Toast.LENGTH_SHORT ).show();
-            }
-        }.execute();
+    private void refreshCacheAndLists() {
+		refreshLists( true );
     }
+
+	private void refreshLists() {
+		refreshLists( false );
+	}
+
+	private void refreshLists( boolean alsoRefreshCache ) {
+
+		updateFragmentIncidentLists( new ArrayList<Incident>(0) );
+
+		new IncidentLoader( this, alsoRefreshCache ) {
+
+			@Override
+            public void onPostExecute( List<Incident> incidents ) {
+				updateFragmentIncidentLists( incidents );
+            }
+
+        }.execute();
+	}
+
+	private void updateFragmentIncidentLists( List<Incident> incidents ) {
+		if (mapFragment != null) {
+			mapFragment.setIncidentList( incidents );
+		}
+		if (listFragment != null) {
+			listFragment.setIncidentList( incidents );
+		}
+	}
 
     @Override
     public boolean onCreateOptionsMenu( Menu menu ) {
@@ -113,7 +118,7 @@ public class IncidentsActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
-                refreshCache();
+                refreshCacheAndLists();
                 return true;
             case R.id.menu_settings:
                 Intent intent = new Intent( this, SettingsActivity.class );

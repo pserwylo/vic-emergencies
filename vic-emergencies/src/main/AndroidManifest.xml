@@ -10,8 +10,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+		android:name=".IncidentsApplication"
         android:allowBackup="true"
-        android:icon="@drawable/pin_fire_info"
+        android:icon="@drawable/fire_info"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat" >
         <activity

@@ -1,7 +1,5 @@
 package com.serwylo.emergencies.data;
 
-import com.serwylo.emergencies.R;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;

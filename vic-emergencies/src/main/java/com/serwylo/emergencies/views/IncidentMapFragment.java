@@ -1,39 +1,21 @@
 package com.serwylo.emergencies.views;
 
-import android.app.Dialog;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
+import android.graphics.drawable.*;
+import android.os.*;
+import android.support.v4.app.*;
+import android.view.*;
+import android.widget.*;
+import com.serwylo.emergencies.*;
+import com.serwylo.emergencies.data.*;
+import org.osmdroid.*;
+import org.osmdroid.events.*;
+import org.osmdroid.tileprovider.tilesource.*;
+import org.osmdroid.util.*;
+import org.osmdroid.views.*;
+import org.osmdroid.views.overlay.*;
+import org.osmdroid.views.overlay.mylocation.*;
 
-import com.serwylo.emergencies.R;
-import com.serwylo.emergencies.data.Incident;
-import com.serwylo.emergencies.data.Location;
-import com.serwylo.emergencies.data.SeverityComparator;
-import com.serwylo.emergencies.views.adapters.IncidentAdapter;
-import com.serwylo.emergencies.views.utils.IncidentLoader;
-
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.events.MapListener;
-import org.osmdroid.events.ScrollEvent;
-import org.osmdroid.events.ZoomEvent;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.BoundingBoxE6;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.mylocation.IMyLocationConsumer;
-import org.osmdroid.views.overlay.mylocation.IMyLocationProvider;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay.OnItemGestureListener<OverlayItem>, IMyLocationConsumer, MapListener {
 
@@ -77,13 +59,8 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 		overlay = new ItemizedIconOverlay<OverlayItem>( new ArrayList<OverlayItem>(), this, resourceProxy );
 		map.getOverlayManager().add( overlay );
 
-		incidents = null;
-		new IncidentLoader( getActivity() ) {
-			@Override
-			public void onPostExecute( List<Incident> result ) {
-                setIncidentList( result );
-			}
-		}.execute();
+		// In case somebody passed us some incidents before we were created...
+		refreshIncidentOverlay();
 
 		return view;
 
