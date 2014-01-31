@@ -11,39 +11,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/btn_call_000"
-        android:textSize="18sp"
-        android:padding="6dp"
-        android:text="Triple Zero - Emergency"
-        android:textColor="@color/heading"
-        />
+        style="@style/Emergencies.Heading"
+        android:text="Triple Zero - Emergency"/>
 
     <ImageButton
         android:id="@+id/btn_call_000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/stat_sys_phone_call"
-        android:layout_alignTop="@+id/text_000" android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_below="@+id/text_000"
+        android:layout_alignParentLeft="true"/>
 
     <TextView
         android:id="@+id/text_000_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_000"
-        android:layout_toLeftOf="@id/btn_call_000"
         android:text="Should be called when police, fire or ambulance attendance is needed in a life-threatening or time critical situation."
-        />
+        android:layout_below="@+id/text_000"
+        android:layout_toRightOf="@+id/btn_call_000"/>
 
     <TextView
         android:id="@+id/text_bushfire_hotline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_000_details"
-        android:textSize="18sp"
-        android:padding="6dp"
         android:text="Victorian Bushfire Information"
-        android:textColor="@color/heading"
+        style="@style/Emergencies.Heading"
         />
 
     <ImageButton
@@ -51,17 +44,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@android:drawable/stat_sys_phone_call"
-        android:layout_alignTop="@+id/text_bushfire_hotline" android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_below="@+id/text_bushfire_hotline"
+        android:layout_alignParentLeft="true"
+        />
 
     <TextView
         android:id="@+id/text_bushfire_hotline_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/text_bushfire_hotline"
-        android:layout_toLeftOf="@id/btn_call_bushfire_hotline"
         android:text="Information on significant bushfires, community meetings, relief and recovery centres, preparing for bushfire risk, total fire bans, fire restrictions and planned burns."
-        />
+        android:layout_below="@+id/text_bushfire_hotline"
+        android:layout_toRightOf="@+id/btn_call_bushfire_hotline"/>
 
 
 

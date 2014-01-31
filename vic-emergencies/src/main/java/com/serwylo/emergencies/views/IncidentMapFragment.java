@@ -1,8 +1,6 @@
 package com.serwylo.emergencies.views;
 
-import android.app.Dialog;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,8 +12,7 @@ import com.serwylo.emergencies.R;
 import com.serwylo.emergencies.data.Incident;
 import com.serwylo.emergencies.data.Location;
 import com.serwylo.emergencies.data.SeverityComparator;
-import com.serwylo.emergencies.views.adapters.IncidentAdapter;
-import com.serwylo.emergencies.views.utils.IncidentLoader;
+import com.serwylo.emergencies.data.IncidentLoader;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;

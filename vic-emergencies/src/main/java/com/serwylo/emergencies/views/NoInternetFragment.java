@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.serwylo.emergencies.R;
 
-public class EmergencyPhoneFragment extends Fragment {
+public class NoInternetFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,7 @@ public class EmergencyPhoneFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate( R.layout.fragment_emergency_phone_details, null );
+        return inflater.inflate( R.layout.fragment_no_internet, null );
     }
 
 }

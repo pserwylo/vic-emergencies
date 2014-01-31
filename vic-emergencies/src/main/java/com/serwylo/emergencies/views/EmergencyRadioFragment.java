@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.serwylo.emergencies.R;
+
 public class EmergencyRadioFragment extends Fragment {
 
     @Override

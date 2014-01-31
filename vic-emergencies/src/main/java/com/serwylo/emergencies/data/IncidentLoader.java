@@ -1,4 +1,4 @@
-package com.serwylo.emergencies.views.utils;
+package com.serwylo.emergencies.data;
 
 import android.content.Context;
 import android.os.AsyncTask;

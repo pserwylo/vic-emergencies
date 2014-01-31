@@ -1,12 +1,15 @@
 package com.serwylo.emergencies;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.serwylo.emergencies.views.IncidentListFragment;
@@ -16,6 +19,21 @@ public class IncidentsActivity extends ActionBarActivity {
 
 	private IncidentMapFragment mapFragment = null;
 	private IncidentListFragment listFragment = null;
+
+	@Override
+	public boolean onCreateOptionsMenu( Menu menu ) {
+		getMenuInflater().inflate( R.menu.incidents_menu, menu );
+		return super.onCreateOptionsMenu( menu );
+	}
+
+	public boolean onOptionsItemSelected( MenuItem item ) {
+		if ( item.getItemId() == R.id.menu_information_services ) {
+			Intent intent = new Intent( this, AlternateInfoActivity.class );
+			startActivity( intent );
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {

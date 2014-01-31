@@ -1,20 +1,16 @@
 package com.serwylo.emergencies.views;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 
 import com.serwylo.emergencies.R;
 import com.serwylo.emergencies.data.Incident;
 import com.serwylo.emergencies.data.SeverityComparator;
 import com.serwylo.emergencies.views.adapters.IncidentAdapter;
-import com.serwylo.emergencies.views.utils.IncidentLoader;
+import com.serwylo.emergencies.data.IncidentLoader;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.serwylo.emergencies" >
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -13,25 +14,30 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat"
-        android:uiOptions="splitActionBarWhenNarrow" >
+        android:theme="@style/Theme.AppCompat">
+
+        <!--android:uiOptions="splitActionBarWhenNarrow"-->
+
         <activity
             android:name="com.serwylo.emergencies.IncidentsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name" >
-            <meta-data
+            android:label="@string/app_name">
+
+            <!--<meta-data
                 android:name="android.support.UI_OPTIONS"
-                android:value="splitActionBarWhenNarrow" />
+                android:value="splitActionBarWhenNarrow" />-->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
         <activity
             android:name="com.serwylo.emergencies.AlternateInfoActivity"
-            android:label="@string/title_activity_alternate_info" >
+            android:label="Emergency Information"
+            android:parentActivityName=".IncidentsActivity">
         </activity>
     </application>
 

@@ -12,10 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/btn_call_000"
-        android:textSize="18sp"
-        android:padding="6dp"
+        style="@style/Emergencies.Heading"
         android:text="Emergency Radio Stations"
-        android:textColor="@color/heading"
         />
 
     <TextView
