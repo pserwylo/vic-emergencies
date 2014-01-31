@@ -1,15 +1,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<ListPreference
-		android:key="sort"
-		android:title="Sort incident list by"
-		android:entries="@array/sortLabels"
-		android:entryValues="@array/sortValues"
-		android:summary="How would you like to sort the incident list?"
-		android:defaultValue="sortImportance" />
-
     <PreferenceCategory
-        android:title="Other states">
+        android:title="Incidents">
+
+		<ListPreference
+			android:key="sort"
+			android:title="Sort incident list by"
+			android:entries="@array/sortLabels"
+			android:entryValues="@array/sortValues"
+			android:summary="How would you like to sort the incident list?"
+			android:defaultValue="sortImportance" />
 
         <CheckBoxPreference
             android:key="showNsw"
@@ -28,5 +28,19 @@
             android:defaultValue="false" />
 
     </PreferenceCategory>
+
+	<PreferenceCategory
+        android:title="Display">
+
+		<ListPreference
+			android:key="theme"
+			android:title="Theme"
+			android:entries="@array/themeLabels"
+			android:entryValues="@array/themeValues"
+			android:summary="What theme do you want to use to display the app?"
+			android:defaultValue="themeLight" />
+
+	</PreferenceCategory>
+
 
 </PreferenceScreen>

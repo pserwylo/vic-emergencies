@@ -16,6 +16,11 @@ public class PrefHelper implements SharedPreferences.OnSharedPreferenceChangeLis
 	public static final String PREF_SORT_IMPORTANCE = "sortImportance";
 	public static final String PREF_SORT_RECENT     = "sortRecent";
 
+	public static final String PREF_THEME = "theme";
+
+	public static final String PREF_THEME_LIGHT = "themeLight";
+	public static final String PREF_THEME_DARK  = "themeDark";
+
 	private static PrefHelper instance;
 
 	public static void setup( Context context ) {
@@ -32,14 +37,16 @@ public class PrefHelper implements SharedPreferences.OnSharedPreferenceChangeLis
 
 	private final ListenerManager stateFilterListener = new ListenerManager( PREF_SHOW_NSW, PREF_SHOW_SA );
 	private final ListenerManager sortListener        = new ListenerManager( PREF_SORT );
+	private final ListenerManager themeListener       = new ListenerManager( PREF_THEME );
 	private final List<ListenerManager> listeners;
 
 	private PrefHelper( Context context ) {
 		preferences = PreferenceManager.getDefaultSharedPreferences( context.getApplicationContext() );
 		preferences.registerOnSharedPreferenceChangeListener( this );
-		listeners = new ArrayList<ListenerManager>( 2 );
+		listeners = new ArrayList<ListenerManager>( 3 );
 		listeners.add( stateFilterListener );
 		listeners.add( sortListener );
+		listeners.add( themeListener );
 	}
 
 	public boolean showNswIncidents() {
@@ -68,6 +75,18 @@ public class PrefHelper implements SharedPreferences.OnSharedPreferenceChangeLis
 
 	public void unregisterSortListener( ChangeListener listener ) {
 		sortListener.unregister( listener );
+	}
+
+	public String theme() {
+		return preferences.getString( PREF_THEME, PREF_THEME_LIGHT );
+	}
+
+	public void registerThemeListener( ChangeListener listener ) {
+		themeListener.register( listener );
+	}
+
+	public void unregisterThemeListener( ChangeListener listener ) {
+		themeListener.unregister( listener );
 	}
 
 	@Override

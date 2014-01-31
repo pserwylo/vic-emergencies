@@ -35,6 +35,8 @@ public class IncidentsActivity extends ActionBarActivity {
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 
+		Utils.refreshTheme( this );
+
 		setContentView( R.layout.incidents );
 
 		Fragment mapFragment  = getSupportFragmentManager().findFragmentById( R.id.incident_map );

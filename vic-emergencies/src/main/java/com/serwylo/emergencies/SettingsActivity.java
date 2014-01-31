@@ -12,8 +12,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setupActionBar();
+		Utils.refreshTheme( this );
+		super.onCreate( savedInstanceState );
+		setupActionBar();
 		addPreferencesFromResource( R.xml.pref_general );
 
     }
@@ -23,6 +24,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 		super.onResume();
 		getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener( this );
 		updateSortBySummary();
+		updateThemeSummary();
 	}
 
 	protected void onPause() {
@@ -55,6 +57,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 	public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
 		if ( key.equals( PrefHelper.PREF_SORT ) ) {
 			updateSortBySummary();
+		} else if ( key.equals( PrefHelper.PREF_THEME ) ) {
+			updateThemeSummary();
+
+			// Seem to need to restart the activity for the theme to apply...
+			finish();
+			startActivity( new Intent( this, getClass() ) );
 		}
 	}
 
@@ -64,6 +72,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 			preference.setSummary( "Most important incidents first" );
 		} else if ( PrefHelper.get().sortBy().equals( PrefHelper.PREF_SORT_RECENT ) ) {
 			preference.setSummary( "Most recent incidents first" );
+		}
+	}
+
+	private void updateThemeSummary() {
+		ListPreference preference = (ListPreference)findPreference( PrefHelper.PREF_THEME );
+		if ( PrefHelper.get().theme().equals( PrefHelper.PREF_THEME_LIGHT ) ) {
+			preference.setSummary( "Light theme (uses more battery)" );
+		} else if ( PrefHelper.get().theme().equals( PrefHelper.PREF_THEME_DARK ) ) {
+			preference.setSummary( "Dark theme (saves battery)" );
 		}
 	}
 
