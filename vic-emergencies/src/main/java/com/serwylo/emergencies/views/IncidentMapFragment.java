@@ -42,7 +42,15 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 	private List<Incident> incidents;
 	private IconSize currentIconSize;
 
-	private enum IconSize {
+    public void setIncidentList( List<Incident> incidents ) {
+        this.incidents = incidents;
+        if ( this.incidents != null ) {
+            Collections.sort( this.incidents, Collections.reverseOrder( new SeverityComparator() ) );
+        }
+        refreshIncidentOverlay();
+    }
+
+    private enum IconSize {
 		SMALL,
 		MEDIUM,
 		LARGE
@@ -76,11 +84,7 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 		new IncidentLoader( getActivity() ) {
 			@Override
 			public void onPostExecute( List<Incident> result ) {
-				incidents = result;
-				if ( incidents != null ) {
-					Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
-					overlay.addItems( createItemOverlays() );
-				}
+                setIncidentList( result );
 			}
 		}.execute();
 
@@ -99,8 +103,11 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 	}
 
 	private void refreshIncidentOverlay() {
-		overlay.removeAllItems();
-		overlay.addItems(createItemOverlays());
+        // If we haven't navigated to this tab yet, then we don't have a reference to the overlay object.
+        if ( overlay != null ) {
+            overlay.removeAllItems();
+            overlay.addItems(createItemOverlays());
+        }
 	}
 
 	private List<OverlayItem> createItemOverlays() {

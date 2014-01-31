@@ -5,12 +5,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.Toast;
+import com.serwylo.emergencies.data.Incident;
+import com.serwylo.emergencies.data.SeverityComparator;
 import com.serwylo.emergencies.views.IncidentListFragment;
 import com.serwylo.emergencies.views.IncidentMapFragment;
+import com.serwylo.emergencies.views.utils.IncidentLoader;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class IncidentsActivity extends ActionBarActivity {
 
@@ -39,41 +51,94 @@ public class IncidentsActivity extends ActionBarActivity {
 			ActionBar actionBar = getSupportActionBar();
 			actionBar.setNavigationMode( ActionBar.NAVIGATION_MODE_TABS );
 
+            TabListener<IncidentListFragment> listTab = new TabListener<IncidentListFragment>( this, "list", IncidentListFragment.class );
+            this.listFragment = listTab.getFragment();
+
 			actionBar.addTab(
 				actionBar.newTab()
 					.setText( "List" )
-					.setTabListener( new TabListener<IncidentListFragment>( this, "list", IncidentListFragment.class ) )
+					.setTabListener( listTab )
 			);
 
+            TabListener<IncidentMapFragment> mapTab = new TabListener<IncidentMapFragment>( this, "map", IncidentMapFragment.class );
+            this.mapFragment = mapTab.getFragment();
+
 			actionBar.addTab(
-					actionBar.newTab()
-							.setText( "Map" )
-							.setTabListener( new TabListener<IncidentMapFragment>( this, "map", IncidentMapFragment.class ) )
+                actionBar.newTab()
+                    .setText("Map")
+                    .setTabListener( mapTab )
 			);
 		}
 
 	}
 
+    private void refreshCache() {
+
+        if ( mapFragment != null ) {
+            mapFragment.setIncidentList( new ArrayList<Incident>( 0 ) );
+        }
+
+        if ( listFragment != null ) {
+            listFragment.setIncidentList( new ArrayList<Incident>( 0 ) );
+        }
+
+        new IncidentLoader( this, true ) {
+            @Override
+            public void onPostExecute( List<Incident> result ) {
+                if (mapFragment != null) {
+                    mapFragment.setIncidentList( result );
+                }
+                if (listFragment != null) {
+                    listFragment.setIncidentList( result );
+                }
+                Toast.makeText(
+                    IncidentsActivity.this,
+                    "Refreshed list of incidents from www.emergency.vic.gov.au",
+                    Toast.LENGTH_SHORT ).show();
+            }
+        }.execute();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu( Menu menu ) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.incident_list_menu, menu);
+        MenuItem refresh = menu.findItem( R.id.menu_refresh );
+        MenuItemCompat.setShowAsAction( refresh, MenuItemCompat.SHOW_AS_ACTION_IF_ROOM );
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_refresh:
+                refreshCache();
+                return true;
+        }
+        return false;
+    }
 }
 
 class TabListener<T extends Fragment> implements ActionBar.TabListener {
 
 	private T fragment;
-	private final Activity activity;
 	private final String tag;
-	private final Class<T> clazz;
+    private boolean hasBeenAdded = false;
 
 	public TabListener(Activity activity, String tag, Class<T> clazz) {
-		this.activity = activity;
 		this.tag = tag;
-		this.clazz = clazz;
+        this.fragment = (T)Fragment.instantiate( activity, clazz.getName() );
 	}
+
+    public T getFragment() {
+        return fragment;
+    }
 
 	@Override
 	public void onTabSelected( ActionBar.Tab tab, FragmentTransaction fragmentTransaction ) {
-		if ( fragment == null ) {
-			fragment = (T)Fragment.instantiate( activity, clazz.getName() );
+		if ( !hasBeenAdded ) {
 			fragmentTransaction.add( android.R.id.content, fragment, tag );
+            hasBeenAdded = true;
 		} else {
 			fragmentTransaction.attach( fragment );
 		}
@@ -81,9 +146,7 @@ class TabListener<T extends Fragment> implements ActionBar.TabListener {
 
 	@Override
 	public void onTabUnselected( ActionBar.Tab tab, FragmentTransaction fragmentTransaction ) {
-		if ( fragment != null ) {
-			fragmentTransaction.detach( fragment );
-		}
+        fragmentTransaction.detach( fragment );
 	}
 
 	@Override

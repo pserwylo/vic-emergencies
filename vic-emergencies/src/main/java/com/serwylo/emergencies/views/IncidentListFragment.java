@@ -37,11 +37,7 @@ public class IncidentListFragment extends ListFragment implements AdapterView.On
 			new IncidentLoader( getActivity() ) {
 				@Override
 				public void onPostExecute( List<Incident> result ) {
-					incidents = result;
-					if ( incidents != null ) {
-						Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
-						setListAdapter( new IncidentAdapter( getActivity(), incidents ) );
-					}
+					setIncidentList( result );
 				}
 			}.execute();
 		} catch ( Exception e ) {
@@ -58,4 +54,13 @@ public class IncidentListFragment extends ListFragment implements AdapterView.On
 		}
 		AdviceDialog.showAdviceIfAvailable( getActivity(), incidents.get( position ) );
 	}
+
+    public void setIncidentList( List<Incident> incidents ) {
+        this.incidents = incidents;
+        if ( incidents != null ) {
+            Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
+        }
+        setListAdapter( new IncidentAdapter( getActivity(), incidents ) );
+    }
+
 }

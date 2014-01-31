@@ -29,10 +29,16 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 	private final String FEED_URL = "http://www.emergency.vic.gov.au/feed.json";
 
 	private final Context context;
+    private final boolean ignoreCache;
 
 	public IncidentLoader( Context context ) {
-		this.context = context;
+		this( context, false );
 	}
+
+    public IncidentLoader( Context context, boolean ignoreCache ) {
+        this.context = context;
+        this.ignoreCache = ignoreCache;
+    }
 
 	private static void closeQuietly( Closeable stream ) {
 		if (stream != null) {
@@ -84,77 +90,20 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 
 	}
 
-	private static class Cache {
-
-		private static final long TIME_TO_KEEP = 1000 * 60 * 5; // 5 minutes
-		private static final String PATH = "www.emergency.vic.gov.au-feed.json";
-
-		private final Context context;
-		private final File filePath;
-
-		public Cache( Context context ) {
-			this.context = context;
-			filePath = new File( context.getFilesDir().getAbsolutePath() + "/" + PATH );
-		}
-
-		public boolean isCached() {
-			return filePath.exists();
-		}
-
-		public boolean isStale() {
-			long sinceModified = System.currentTimeMillis() - filePath.lastModified();
-			return sinceModified > TIME_TO_KEEP;
-		}
-
-		public String load() {
-
-			String json = null;
-			FileInputStream input = null;
-			ByteArrayOutputStream output = null;
-
-			try {
-
-				input = new FileInputStream( filePath );
-				output = new ByteArrayOutputStream();
-				copy(input, output);
-				json = output.toString();
-
-			} catch ( IOException e ) {
-				Log.e("Incidents", e.getMessage());
-			} finally {
-				closeQuietly( input );
-				closeQuietly( output );
-			}
-
-			return json;
-
-		}
-
-		public void save( String json ) {
-
-			try {
-				FileWriter writer = new FileWriter( filePath );
-				writer.write( json );
-				closeQuietly( writer );
-			} catch ( IOException e ) {
-				Log.e( "Incidents", e.getMessage() );
-			}
-
-		}
-	}
-
 	@Override
 	protected List<Incident> doInBackground( Void... params ) {
 
 		Cache cache = new Cache( context );
 
-		String json = null;
+		String json;
 
-		if ( cache.isCached() && !cache.isStale() ) {
+		if ( !ignoreCache && cache.isCached() && !cache.isStale() ) {
 			Log.i("Incidents", "Loading list of emergencies from cache." );
 			json = cache.load();
 		} else {
-			if ( !cache.isCached() ) {
+            if ( ignoreCache ) {
+                Log.i( "Incidents", "Re-downloading list of incidents due to manual refresh." );
+            } else if ( !cache.isCached() ) {
 				Log.i( "Incidents", "Downloading list of emergencies for first time." );
 			} else {
 				Log.i( "Incidents", "Downloading list of emergencies again because the old list is too old." );
@@ -163,31 +112,90 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 			cache.save( json );
 		}
 
-		List<Incident> incidents = null;
+		List<Incident> incidents;
 
 		if ( json == null || json.trim().length() == 0 ) {
 			Log.e("Incidents", "Could not load json." );
 			return new ArrayList<Incident>( 0 );
-		}
+		} else {
+            try {
+                JSONObject object = new JSONObject( json );
+                JSONArray events = object.getJSONArray( "events" );
+                incidents = new ArrayList<Incident>( events.length() );
 
-		try {
+                for (int i = 0; i < events.length(); i ++) {
+                    Incident incident = new Incident(events.getJSONObject( i ) );
+                    incidents.add(incident);
+                }
 
-			JSONObject object = new JSONObject( json );
-			JSONArray events = object.getJSONArray( "events" );
-			incidents = new ArrayList<Incident>( events.length() );
-			for (int i = 0; i < events.length(); i ++) {
-				Incident incident = new Incident(events.getJSONObject( i ) );
-				incidents.add(incident);
-			}
+                Log.i( "Incidents", "Loaded " + incidents.size() + " incidents from JSON data." );
+            } catch ( JSONException e ) {
+                Log.e( "Incidents", "Error parsing JSON: " + e.getMessage() );
+                incidents = new ArrayList<Incident>( 0 );
+            }
+        }
 
-			Log.i( "Incidents", "Loaded " + incidents.size() + " incidents from JSON data." );
-			return incidents;
-
-		} catch ( JSONException e ) {
-			Log.e( "Incidents", "Error parsing JSON: " + e.getMessage() );
-		}
-
-		return new ArrayList<Incident>( 0 );
+		return incidents;
 
 	}
+
+    private static class Cache {
+
+        private static final long TIME_TO_KEEP = 1000 * 60 * 5; // 5 minutes
+        private static final String PATH = "www.emergency.vic.gov.au-feed.json";
+
+        private final Context context;
+        private final File filePath;
+
+        public Cache( Context context ) {
+            this.context = context;
+            filePath = new File( context.getFilesDir().getAbsolutePath() + "/" + PATH );
+        }
+
+        public boolean isCached() {
+            return filePath.exists();
+        }
+
+        public boolean isStale() {
+            long sinceModified = System.currentTimeMillis() - filePath.lastModified();
+            return sinceModified > TIME_TO_KEEP;
+        }
+
+        public String load() {
+
+            String json = null;
+            FileInputStream input = null;
+            ByteArrayOutputStream output = null;
+
+            try {
+
+                input = new FileInputStream( filePath );
+                output = new ByteArrayOutputStream();
+                copy(input, output);
+                json = output.toString();
+
+            } catch ( IOException e ) {
+                Log.e("Incidents", e.getMessage());
+            } finally {
+                closeQuietly( input );
+                closeQuietly( output );
+            }
+
+            return json;
+
+        }
+
+        public void save( String json ) {
+
+            try {
+                FileWriter writer = new FileWriter( filePath );
+                writer.write( json );
+                closeQuietly( writer );
+            } catch ( IOException e ) {
+                Log.e( "Incidents", e.getMessage() );
+            }
+
+        }
+    }
+
 }
