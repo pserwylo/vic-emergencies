@@ -27,16 +27,25 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 	private final String FEED_URL = "http://www.emergency.vic.gov.au/feed.json";
 
 	private final Context context;
-    private final boolean ignoreCache;
+
+	private static List<Incident> cachedIncidents = null;
 
 	public IncidentLoader( Context context ) {
 		this( context, false );
 	}
 
-    public IncidentLoader( Context context, boolean ignoreCache ) {
+    public IncidentLoader( Context context, boolean clearCache ) {
         this.context = context;
-        this.ignoreCache = ignoreCache;
+		if ( clearCache ) {
+			clearCache();
+		}
     }
+
+	private void clearCache() {
+		Log.i( "Incidents", "Clearing cached list of incidents due to manual refresh." );
+		cachedIncidents = null;
+		IncidentCache.get( context ).clear();
+	}
 
 	private static void closeQuietly( Closeable stream ) {
 		if (stream != null) {
@@ -91,27 +100,48 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 	@Override
 	protected List<Incident> doInBackground( Void... params ) {
 
-		Cache cache = new Cache( context );
-
-		String json;
-
-		if ( !ignoreCache && cache.isCached() && !cache.isStale() ) {
-			Log.i("Incidents", "Loading list of emergencies from cache." );
-			json = cache.load();
-		} else {
-            if ( ignoreCache ) {
-                Log.i( "Incidents", "Re-downloading list of incidents due to manual refresh." );
-            } else if ( !cache.isCached() ) {
-				Log.i( "Incidents", "Downloading list of emergencies for first time." );
-			} else {
-				Log.i( "Incidents", "Downloading list of emergencies again because the old list is too old." );
-			}
-			json = downloadJson();
-			cache.save( json );
-		}
-
+		IncidentCache cache = IncidentCache.get( context );
 		List<Incident> incidents;
 
+		if ( !cache.isStale() && cachedIncidents != null ) {
+
+			Log.i( "Incidents", "Loading list of emergencies from cache (already parsed JSON)." );
+			incidents = cachedIncidents;
+
+		} else {
+
+			String json;
+			if ( cache.isCached() && !cache.isStale() ) {
+
+				Log.i( "Incidents", "Parsing cached JSON file to get incidents." );
+				json = cache.load();
+
+			} else {
+
+				if ( !cache.isCached() ) {
+					Log.i( "Incidents", "Downloading list of emergencies for first time." );
+				} else {
+					Log.i( "Incidents", "Downloading list of emergencies again because the old list is too old." );
+				}
+
+				json = downloadJson();
+				cache.save( json );
+			}
+
+			incidents = jsonToIncidents( json );
+		}
+
+		cachedIncidents = new ArrayList<Incident>( incidents );
+
+		filterIncidents( incidents );
+		sortIncidents( incidents );
+
+		return incidents;
+
+	}
+
+	private static List<Incident> jsonToIncidents( String json ) {
+		List<Incident> incidents;
 		if ( json == null || json.trim().length() == 0 ) {
 			Log.e("Incidents", "Could not load json." );
 			return new ArrayList<Incident>( 0 );
@@ -132,12 +162,7 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
                 incidents = new ArrayList<Incident>( 0 );
             }
         }
-
-		filterIncidents( incidents );
-		sortIncidents( incidents );
-
 		return incidents;
-
 	}
 
 	private static void filterIncidents( List<Incident> incidents ) {
@@ -165,26 +190,41 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 		}
 	}
 
-    private static class Cache {
+    private static class IncidentCache {
 
         private static final long TIME_TO_KEEP = 1000 * 60 * 5; // 5 minutes
         private static final String PATH = "www.emergency.vic.gov.au-feed.json";
 
-        private final Context context;
         private final File filePath;
 
-        public Cache( Context context ) {
-            this.context = context;
+		private static IncidentCache instance = null;
+
+		public static IncidentCache get( Context context ) {
+			if ( instance == null ) {
+				instance = new IncidentCache( context );
+			}
+			return instance;
+		}
+
+        private IncidentCache( Context context ) {
             filePath = new File( context.getFilesDir().getAbsolutePath() + "/" + PATH );
         }
+
+		public void clear() {
+			filePath.delete();
+		}
 
         public boolean isCached() {
             return filePath.exists();
         }
 
         public boolean isStale() {
-            long sinceModified = System.currentTimeMillis() - filePath.lastModified();
-            return sinceModified > TIME_TO_KEEP;
+			if ( !isCached() ) {
+				return true;
+			} else {
+				long sinceModified = System.currentTimeMillis() - filePath.lastModified();
+				return sinceModified > TIME_TO_KEEP;
+			}
         }
 
         public String load() {
@@ -213,13 +253,17 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 
         public void save( String json ) {
 
-            try {
-                FileWriter writer = new FileWriter( filePath );
-                writer.write( json );
-                closeQuietly( writer );
-            } catch ( IOException e ) {
-                Log.e( "Incidents", e.getMessage() );
-            }
+			if ( json == null ) {
+				Log.i( "Incidents", "Not caching incident list, because we didn't manage to download one." );
+			} else {
+				try {
+					FileWriter writer = new FileWriter( filePath );
+					writer.write( json );
+					closeQuietly( writer );
+				} catch ( IOException e ) {
+					Log.e( "Incidents", e.getMessage() );
+				}
+			}
 
         }
     }
