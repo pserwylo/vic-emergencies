@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Other states">
+
+        <CheckBoxPreference
+            android:key="show_nsw"
+            android:title="NSW Incidents"
+            android:summary="Show incidents from NSW?"
+            android:summaryOn="Showing NSW incidents"
+            android:summaryOff="Not showing NSW incidents"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="show_sa"
+            android:title="SA Incidents"
+            android:summary="Show incidents from SA?"
+            android:summaryOn="Showing SA incidents"
+            android:summaryOff="Not showing SA incidents"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

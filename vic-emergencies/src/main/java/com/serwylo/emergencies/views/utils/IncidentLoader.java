@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.serwylo.emergencies.PrefHelper;
 import com.serwylo.emergencies.data.Incident;
 
+import com.serwylo.emergencies.data.SeverityComparator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +24,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident>> {
@@ -135,7 +138,20 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
             }
         }
 
-		return incidents;
+		PrefHelper helper = new PrefHelper( context );
+		List<Incident> filteredIncidents = new ArrayList<Incident>( incidents.size() );
+		for ( Incident incident : incidents ) {
+			boolean include = true;
+			if ( !helper.showNswIncidents() && incident.getState().equals( "NSW" ) ) {
+				include = false;
+			} else if ( !helper.showSaIncidents() && incident.getState().equals( "SA" ) ) {
+				include = false;
+			}
+			if ( include )
+				filteredIncidents.add( incident );
+		}
+		Collections.sort( filteredIncidents, Collections.reverseOrder( new SeverityComparator() ) );
+		return filteredIncidents;
 
 	}
 

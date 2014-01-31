@@ -57,9 +57,6 @@ public class IncidentListFragment extends ListFragment implements AdapterView.On
 
     public void setIncidentList( List<Incident> incidents ) {
         this.incidents = incidents;
-        if ( incidents != null ) {
-            Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
-        }
         setListAdapter( new IncidentAdapter( getActivity(), incidents ) );
     }
 

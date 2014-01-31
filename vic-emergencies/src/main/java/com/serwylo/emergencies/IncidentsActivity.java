@@ -1,6 +1,7 @@
 package com.serwylo.emergencies;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -75,11 +76,11 @@ public class IncidentsActivity extends ActionBarActivity {
     private void refreshCache() {
 
         if ( mapFragment != null ) {
-            mapFragment.setIncidentList( new ArrayList<Incident>( 0 ) );
+            mapFragment.setIncidentList(new ArrayList<Incident>(0));
         }
 
         if ( listFragment != null ) {
-            listFragment.setIncidentList( new ArrayList<Incident>( 0 ) );
+            listFragment.setIncidentList(new ArrayList<Incident>(0));
         }
 
         new IncidentLoader( this, true ) {
@@ -103,8 +104,8 @@ public class IncidentsActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu( Menu menu ) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.incident_list_menu, menu);
-        MenuItem refresh = menu.findItem( R.id.menu_refresh );
-        MenuItemCompat.setShowAsAction( refresh, MenuItemCompat.SHOW_AS_ACTION_IF_ROOM );
+		MenuItemCompat.setShowAsAction(menu.findItem( R.id.menu_settings ), MenuItemCompat.SHOW_AS_ACTION_ALWAYS );
+        MenuItemCompat.setShowAsAction( menu.findItem( R.id.menu_refresh ), MenuItemCompat.SHOW_AS_ACTION_IF_ROOM );
         return true;
     }
 
@@ -113,6 +114,10 @@ public class IncidentsActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.menu_refresh:
                 refreshCache();
+                return true;
+            case R.id.menu_settings:
+                Intent intent = new Intent( this, SettingsActivity.class );
+				startActivity( intent );
                 return true;
         }
         return false;

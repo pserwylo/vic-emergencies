@@ -44,13 +44,10 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 
     public void setIncidentList( List<Incident> incidents ) {
         this.incidents = incidents;
-        if ( this.incidents != null ) {
-            Collections.sort( this.incidents, Collections.reverseOrder( new SeverityComparator() ) );
-        }
         refreshIncidentOverlay();
     }
 
-    private enum IconSize {
+	private enum IconSize {
 		SMALL,
 		MEDIUM,
 		LARGE
