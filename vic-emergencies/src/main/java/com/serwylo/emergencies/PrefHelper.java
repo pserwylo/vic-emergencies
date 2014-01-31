@@ -8,8 +8,13 @@ import java.util.*;
 
 public class PrefHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-	private static final String PREF_SHOW_NSW = "showNsw";
-	private static final String PREF_SHOW_SA = "showSa";
+	public static final String PREF_SHOW_NSW = "showNsw";
+	public static final String PREF_SHOW_SA = "showSa";
+
+	public static final String PREF_SORT = "sort";
+
+	public static final String PREF_SORT_IMPORTANCE = "sortImportance";
+	public static final String PREF_SORT_RECENT     = "sortRecent";
 
 	private static PrefHelper instance;
 
@@ -26,13 +31,15 @@ public class PrefHelper implements SharedPreferences.OnSharedPreferenceChangeLis
 	private SharedPreferences preferences;
 
 	private final ListenerManager stateFilterListener = new ListenerManager( PREF_SHOW_NSW, PREF_SHOW_SA );
+	private final ListenerManager sortListener        = new ListenerManager( PREF_SORT );
 	private final List<ListenerManager> listeners;
 
 	private PrefHelper( Context context ) {
 		preferences = PreferenceManager.getDefaultSharedPreferences( context.getApplicationContext() );
 		preferences.registerOnSharedPreferenceChangeListener( this );
-		listeners = new ArrayList<ListenerManager>( 1 );
+		listeners = new ArrayList<ListenerManager>( 2 );
 		listeners.add( stateFilterListener );
+		listeners.add( sortListener );
 	}
 
 	public boolean showNswIncidents() {
@@ -49,6 +56,18 @@ public class PrefHelper implements SharedPreferences.OnSharedPreferenceChangeLis
 
 	public void unregisterStateFilterListener( ChangeListener listener ) {
 		stateFilterListener.unregister( listener );
+	}
+
+	public String sortBy() {
+		return preferences.getString( PREF_SORT, PREF_SORT_RECENT );
+	}
+
+	public void registerSortListener( ChangeListener listener ) {
+		sortListener.register( listener );
+	}
+
+	public void unregisterSortListener( ChangeListener listener ) {
+		sortListener.unregister( listener );
 	}
 
 	@Override

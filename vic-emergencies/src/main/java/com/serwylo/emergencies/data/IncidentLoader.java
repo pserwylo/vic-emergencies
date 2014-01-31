@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.serwylo.emergencies.PrefHelper;
-import com.serwylo.emergencies.data.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,9 +20,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident>> {
 
@@ -137,7 +134,8 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
         }
 
 		filterIncidents( incidents );
-		Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
+		sortIncidents( incidents );
+
 		return incidents;
 
 	}
@@ -152,6 +150,19 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 			validStates.add( Incident.STATE_SA );
 		}
 		IncidentFilter.filter( incidents, new StateFilter( validStates ) );
+	}
+
+	private static void sortIncidents( List<Incident> incidents ) {
+		Comparator<Incident> comparator = null;
+		if ( PrefHelper.get().sortBy().equals( PrefHelper.PREF_SORT_IMPORTANCE ) ) {
+			comparator = new ImportanceComparator();
+		} else if ( PrefHelper.get().sortBy().equals( PrefHelper.PREF_SORT_RECENT ) ) {
+			comparator = new RecentComparator();
+		}
+
+		if ( comparator != null ) {
+			Collections.sort( incidents, comparator );
+		}
 	}
 
     private static class Cache {
