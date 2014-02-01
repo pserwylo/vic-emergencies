@@ -1,7 +1,9 @@
 package com.serwylo.emergencies.views;
 
+import android.app.*;
 import android.os.*;
 import android.support.v4.app.*;
+import android.support.v4.app.ListFragment;
 import android.view.*;
 import android.widget.*;
 import com.serwylo.emergencies.*;
@@ -14,6 +16,7 @@ public class IncidentListFragment extends ListFragment implements AdapterView.On
 
 	private IncidentMapFragment mapFragment = null;
 	private List<Incident> incidents = null;
+	private IncidentAdapter adapter = null;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -34,7 +37,25 @@ public class IncidentListFragment extends ListFragment implements AdapterView.On
 
     public void setIncidentList( List<Incident> incidents ) {
         this.incidents = incidents;
-        setListAdapter( new IncidentAdapter( getActivity(), incidents ) );
+		if ( adapter != null ) {
+			adapter.clear();
+			addIncidentsToAdapter( this.incidents );
+		}
     }
 
+	private void addIncidentsToAdapter( List<Incident> incidentsToAdd ) {
+		for ( Incident incident : incidentsToAdd ) {
+			adapter.add( incident );
+		}
+	}
+
+	@Override
+	public void onAttach( Activity activity ) {
+		super.onAttach( activity );
+		adapter = new IncidentAdapter( activity.getApplicationContext(), new ArrayList<Incident>( 0 ) );
+		if ( incidents != null ) {
+			addIncidentsToAdapter( incidents );
+		}
+		setListAdapter( adapter );
+	}
 }
