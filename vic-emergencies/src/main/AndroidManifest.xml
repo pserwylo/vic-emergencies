@@ -11,21 +11,16 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+		android:name=".IncidentsApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/fire_info"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat">
-
-        <!--android:uiOptions="splitActionBarWhenNarrow"-->
 
         <activity
             android:name="com.serwylo.emergencies.IncidentsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name">
-
-            <!--<meta-data
-                android:name="android.support.UI_OPTIONS"
-                android:value="splitActionBarWhenNarrow" />-->
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +28,14 @@
             </intent-filter>
 
         </activity>
-
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName="com.serwylo.emergencies.IncidentsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.serwylo.emergencies.IncidentsActivity" />
+        </activity>
         <activity
             android:name="com.serwylo.emergencies.AlternateInfoActivity"
             android:label="Emergency Information"

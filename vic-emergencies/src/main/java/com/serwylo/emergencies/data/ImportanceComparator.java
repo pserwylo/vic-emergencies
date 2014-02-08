@@ -1,24 +1,24 @@
 package com.serwylo.emergencies.data;
 
-import com.serwylo.emergencies.R;
-
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SeverityComparator implements Comparator<Incident> {
+public class ImportanceComparator implements Comparator<Incident> {
 
 	private static Map<String, Integer> severity = new HashMap<String, Integer>(5);
 
-	private static final int UNKNOWN = 2;
+	private static final Comparator<Incident> TIE_BREAK_COMPARATOR = new RecentComparator();
+
+	private static final int UNKNOWN = 4;
 
 	static {
-		severity.put( "warningEvacuation", 6 );
-		severity.put( "warningWatchAct", 5 );
-		severity.put( "warningAdvice", 4 );
+		severity.put( "warningEvacuation", 0 );
+		severity.put( "warningWatchAct", 1 );
+		severity.put( "warningAdvice", 2 );
 		severity.put( "fireActive", 3 );
-		severity.put( "plannedBurn", 1 );
-		severity.put( "fire", 0 );
+		severity.put( "plannedBurn", 5 );
+		severity.put( "fire", 6 );
 	}
 
 	private int getSeverity( Incident incident ) {
@@ -40,7 +40,7 @@ public class SeverityComparator implements Comparator<Incident> {
 		} else if ( rhsSeverity < lhsSeverity ) {
 			return 1;
 		} else {
-			return 0;
+			return TIE_BREAK_COMPARATOR.compare( lhs, rhs );
 		}
 	}
 }

@@ -3,8 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="25dp"
-    android:padding="8dp">
+    android:minHeight="25dp">
 
     <LinearLayout
         android:layout_alignParentTop="true"

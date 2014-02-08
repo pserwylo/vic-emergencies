@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string-array name="sortLabels">
+		<item>Most recent</item>
+		<item>Most important</item>
+	</string-array>
+
+	<string-array name="sortValues">
+		<item>sortRecent</item>
+		<item>sortImportance</item>
+	</string-array>
+
+	<string-array name="themeLabels">
+		<item>Light</item>
+		<item>Dark</item>
+	</string-array>
+
+	<string-array name="themeValues">
+		<item>themeLight</item>
+		<item>themeDark</item>
+	</string-array>
+
+</resources>

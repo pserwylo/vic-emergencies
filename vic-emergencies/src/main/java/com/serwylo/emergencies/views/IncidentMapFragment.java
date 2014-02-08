@@ -1,6 +1,8 @@
 package com.serwylo.emergencies.views;
 
+import android.app.Dialog;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,7 +14,8 @@ import com.serwylo.emergencies.R;
 import com.serwylo.emergencies.data.Incident;
 import com.serwylo.emergencies.data.Location;
 import com.serwylo.emergencies.data.SeverityComparator;
-import com.serwylo.emergencies.data.IncidentLoader;
+import com.serwylo.emergencies.views.adapters.IncidentAdapter;
+import com.serwylo.emergencies.views.utils.IncidentLoader;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.ResourceProxy;
@@ -38,6 +41,11 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 	private ItemizedIconOverlay<OverlayItem> overlay;
 	private List<Incident> incidents;
 	private IconSize currentIconSize;
+
+    public void setIncidentList( List<Incident> incidents ) {
+        this.incidents = incidents;
+        refreshIncidentOverlay();
+    }
 
 	private enum IconSize {
 		SMALL,
@@ -69,17 +77,8 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 		overlay = new ItemizedIconOverlay<OverlayItem>( new ArrayList<OverlayItem>(), this, resourceProxy );
 		map.getOverlayManager().add( overlay );
 
-		incidents = null;
-		new IncidentLoader( getActivity() ) {
-			@Override
-			public void onPostExecute( List<Incident> result ) {
-				incidents = result;
-				if ( incidents != null ) {
-					Collections.sort( incidents, Collections.reverseOrder( new SeverityComparator() ) );
-					overlay.addItems( createItemOverlays() );
-				}
-			}
-		}.execute();
+		// In case somebody passed us some incidents before we were created...
+		refreshIncidentOverlay();
 
 		return view;
 
@@ -96,8 +95,11 @@ public class IncidentMapFragment extends Fragment implements ItemizedIconOverlay
 	}
 
 	private void refreshIncidentOverlay() {
-		overlay.removeAllItems();
-		overlay.addItems(createItemOverlays());
+        // If we haven't navigated to this tab yet, then we don't have a reference to the overlay object.
+        if ( overlay != null ) {
+            overlay.removeAllItems();
+            overlay.addItems(createItemOverlays());
+        }
 	}
 
 	private List<OverlayItem> createItemOverlays() {

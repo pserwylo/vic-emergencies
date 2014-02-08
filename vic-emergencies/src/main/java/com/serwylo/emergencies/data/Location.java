@@ -3,8 +3,6 @@ package com.serwylo.emergencies.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
-
 public class Location {
 
 	private String name;

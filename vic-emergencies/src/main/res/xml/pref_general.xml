@@ -1,0 +1,46 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Incidents">
+
+		<ListPreference
+			android:key="sort"
+			android:title="Sort incident list by"
+			android:entries="@array/sortLabels"
+			android:entryValues="@array/sortValues"
+			android:summary="How would you like to sort the incident list?"
+			android:defaultValue="sortImportance" />
+
+        <CheckBoxPreference
+            android:key="showNsw"
+            android:title="NSW Incidents"
+            android:summary="Show incidents from NSW?"
+            android:summaryOn="Showing NSW incidents"
+            android:summaryOff="Not showing NSW incidents"
+            android:defaultValue="false" />
+
+        <CheckBoxPreference
+            android:key="showSa"
+            android:title="SA Incidents"
+            android:summary="Show incidents from SA?"
+            android:summaryOn="Showing SA incidents"
+            android:summaryOff="Not showing SA incidents"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+	<PreferenceCategory
+        android:title="Display">
+
+		<ListPreference
+			android:key="theme"
+			android:title="Theme"
+			android:entries="@array/themeLabels"
+			android:entryValues="@array/themeValues"
+			android:summary="What theme do you want to use to display the app?"
+			android:defaultValue="themeLight" />
+
+	</PreferenceCategory>
+
+
+</PreferenceScreen>
