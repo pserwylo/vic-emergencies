@@ -9,4 +9,9 @@
         android:id="@+id/menu_refresh"
         android:title="Refresh"
         android:icon="@android:drawable/ic_menu_rotate" />
+
+    <item
+        android:id="@+id/menu_information_services"
+        android:title="Information Services"/>
+
 </menu>

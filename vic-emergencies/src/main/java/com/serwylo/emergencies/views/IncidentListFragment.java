@@ -1,23 +1,15 @@
 package com.serwylo.emergencies.views;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.os.AsyncTask;
-import android.os.Bundle;
+import android.app.*;
+import android.os.*;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
-import android.view.View;
-import android.webkit.WebView;
-import android.widget.AdapterView;
+import android.view.*;
+import android.widget.*;
+import com.serwylo.emergencies.*;
+import com.serwylo.emergencies.data.*;
+import com.serwylo.emergencies.views.adapters.*;
 
-import com.serwylo.emergencies.R;
-import com.serwylo.emergencies.data.Incident;
-import com.serwylo.emergencies.data.SeverityComparator;
-import com.serwylo.emergencies.views.adapters.IncidentAdapter;
-import com.serwylo.emergencies.views.utils.IncidentLoader;
-
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class IncidentListFragment extends ListFragment implements AdapterView.OnItemClickListener {
 

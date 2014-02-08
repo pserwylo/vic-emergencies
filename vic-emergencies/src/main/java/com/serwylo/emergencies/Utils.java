@@ -1,5 +1,6 @@
 package com.serwylo.emergencies;
 
+import android.app.*;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

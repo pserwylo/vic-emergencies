@@ -10,14 +10,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 
-import com.serwylo.emergencies.data.Incident;
+import com.serwylo.emergencies.data.*;
 import com.serwylo.emergencies.views.IncidentListFragment;
 import com.serwylo.emergencies.views.IncidentMapFragment;
-import com.serwylo.emergencies.data.IncidentLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,21 +23,6 @@ public class IncidentsActivity extends ActionBarActivity {
 
 	private IncidentMapFragment mapFragment = null;
 	private IncidentListFragment listFragment = null;
-
-	@Override
-	public boolean onCreateOptionsMenu( Menu menu ) {
-		getMenuInflater().inflate( R.menu.incidents_menu, menu );
-		return super.onCreateOptionsMenu( menu );
-	}
-
-	public boolean onOptionsItemSelected( MenuItem item ) {
-		if ( item.getItemId() == R.id.menu_information_services ) {
-			Intent intent = new Intent( this, AlternateInfoActivity.class );
-			startActivity( intent );
-			return true;
-		}
-		return false;
-	}
 
 	@Override
 	protected void onResume() {
@@ -140,9 +122,11 @@ public class IncidentsActivity extends ActionBarActivity {
                 refreshCacheAndLists();
                 return true;
             case R.id.menu_settings:
-                Intent intent = new Intent( this, SettingsActivity.class );
-				startActivity( intent );
+				startActivity( new Intent( this, SettingsActivity.class ) );
                 return true;
+			case R.id.menu_information_services:
+				startActivity( new Intent( this, AlternateInfoActivity.class ) );
+				return true;
         }
         return false;
     }
