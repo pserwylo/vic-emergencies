@@ -5,7 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.webkit.WebView;
 
-import com.serwylo.emergencies.data.Incident;
+import com.serwylo.emergencies.data.incidents.Incident;
 
 public final class AdviceDialog {
 

@@ -1,4 +1,4 @@
-package com.serwylo.emergencies.data;
+package com.serwylo.emergencies.data.incidents;
 
 import java.util.Comparator;
 import java.util.HashMap;

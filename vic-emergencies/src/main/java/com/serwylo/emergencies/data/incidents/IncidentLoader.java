@@ -1,4 +1,4 @@
-package com.serwylo.emergencies.data;
+package com.serwylo.emergencies.data.incidents;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -125,6 +125,9 @@ public abstract class IncidentLoader extends AsyncTask<Void, Void, List<Incident
 				}
 
 				json = downloadJson();
+				if (json == null) {
+					return null;
+				}
 				cache.save( json );
 			}
 

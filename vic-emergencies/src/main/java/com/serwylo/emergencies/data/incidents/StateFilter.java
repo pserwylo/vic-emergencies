@@ -1,6 +1,4 @@
-package com.serwylo.emergencies.data;
-
-import android.util.*;
+package com.serwylo.emergencies.data.incidents;
 
 import java.util.*;
 

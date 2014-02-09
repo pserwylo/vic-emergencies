@@ -6,7 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.view.*;
 import android.widget.*;
 import com.serwylo.emergencies.*;
-import com.serwylo.emergencies.data.*;
+import com.serwylo.emergencies.data.incidents.*;
 import com.serwylo.emergencies.views.adapters.*;
 
 import java.util.*;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+		<LinearLayout
+			android:id="@+id/layout_header"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="8dp"
+				android:textColor="@android:color/holo_red_light"
+				android:text="Could not access the internet. Please check your connection and then refresh. In case of emergency, here are relevant emergency contact details."/>
+
+		</LinearLayout>
+
+        <fragment
+            android:id="@+id/fragment_phone_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+			class="com.serwylo.emergencies.views.EmergencyPhoneFragment"
+            tools:layout="@layout/fragment_emergency_phone_details" android:layout_below="@+id/layout_header"
+			android:layout_alignParentLeft="true" android:layout_alignParentStart="true"/>
+
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            class="com.serwylo.emergencies.views.EmergencyRadioFragment"
+            tools:layout="@layout/fragment_emergency_radio_details"
+            android:layout_below="@+id/fragment_phone_details" android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

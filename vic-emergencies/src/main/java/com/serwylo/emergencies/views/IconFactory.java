@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import com.serwylo.emergencies.R;
-import com.serwylo.emergencies.data.Incident;
+import com.serwylo.emergencies.data.incidents.Incident;
 
 import java.util.HashMap;
 import java.util.Map;

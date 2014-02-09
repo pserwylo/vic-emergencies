@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:src="@android:drawable/stat_sys_phone_call"
         android:layout_below="@+id/text_000"
+		android:onClick="onClickBushfireHotline"
         android:layout_alignParentLeft="true"/>
 
     <TextView

@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.serwylo.emergencies.R;
-import com.serwylo.emergencies.data.Incident;
-import com.serwylo.emergencies.data.Location;
+import com.serwylo.emergencies.data.incidents.Incident;
+import com.serwylo.emergencies.data.incidents.Location;
 import com.serwylo.emergencies.views.IconFactory;
 
 import java.util.List;

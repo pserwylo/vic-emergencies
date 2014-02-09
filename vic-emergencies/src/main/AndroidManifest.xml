@@ -41,6 +41,11 @@
             android:label="Emergency Information"
             android:parentActivityName=".IncidentsActivity">
         </activity>
-    </application>
+        <activity
+            android:name="com.serwylo.emergencies.NoInternetInfoActivity"
+            android:label="Emergency Information"
+            android:parentActivityName=".IncidentsActivity">
+        </activity>
+	</application>
 
 </manifest>

@@ -6,7 +6,7 @@ import android.support.v4.app.*;
 import android.view.*;
 import android.widget.*;
 import com.serwylo.emergencies.*;
-import com.serwylo.emergencies.data.*;
+import com.serwylo.emergencies.data.incidents.*;
 import org.osmdroid.*;
 import org.osmdroid.events.*;
 import org.osmdroid.tileprovider.tilesource.*;

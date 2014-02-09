@@ -1,4 +1,4 @@
-package com.serwylo.emergencies.data;
+package com.serwylo.emergencies.data.incidents;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuInflater;
 
-import com.serwylo.emergencies.data.*;
+import com.serwylo.emergencies.data.incidents.*;
 import com.serwylo.emergencies.views.IncidentListFragment;
 import com.serwylo.emergencies.views.IncidentMapFragment;
 
@@ -91,7 +91,12 @@ public class IncidentsActivity extends ActionBarActivity {
 
 			@Override
             public void onPostExecute( List<Incident> incidents ) {
-				updateFragmentIncidentLists( incidents );
+				if (incidents == null) {
+					Intent intent = new Intent(IncidentsActivity.this, NoInternetInfoActivity.class);
+					startActivity(intent);
+				} else {
+					updateFragmentIncidentLists( incidents );
+				}
             }
 
         }.execute();
