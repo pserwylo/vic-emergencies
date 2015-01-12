@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en" ng-app="app">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <title>Vic Emergencies</title>
+  
+  <link rel="stylesheet" href="lib/onsen/css/onsenui.css">  
+  <link rel="stylesheet" href="styles/app.css"/>
+  <link rel="stylesheet" href="styles/onsen-css-components-blue-basic-theme.css">  
+  <link rel="stylesheet" href="lib/leaflet/leaflet.css">
+  <link rel="stylesheet" href="lib/font-awesome/font-awesome.min.css">
+
+  <script src="lib/onsen/js/angular/angular.js"></script>    
+  <script src="lib/onsen/js/onsenui.js"></script>
+  <script src="lib/leaflet/leaflet.js"></script>
+  <script src="lib/angular-leaflet-directive.min.js"></script>
+
+  <script src="cordova.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    ons.ready(function() {
+
+
+
+    });
+  </script>
+
+  <style>
+    .item {
+      padding: 10px 35px 10px 10px;
+      line-height: 1;
+    }
+    .item-thum {
+      background-color: #ccc;
+      width: 50px;
+      height: 50px;
+      border-radius: 4px;
+      background-size: contain;
+    }
+    .toolbar {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+    }
+    .marker {
+      width: 46px;
+      height: 46px;
+    }
+    .icon-info {
+      background: url(img/icons/icon-info.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-advice {
+      background: url(img/icons/icon-advice.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-warning {
+      background: url(img/icons/icon-warning.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-evacuate {
+      background: url(img/icons/icon-evacuate.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-fire {
+      background: url(img/icons/icon-fire.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-car {
+      background: url(img/icons/icon-car.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-tree-car {
+      background: url(img/icons/icon-tree-car.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-tree-fire {
+      background: url(img/icons/icon-tree-fire.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-building {
+      background: url(img/icons/icon-building.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-other {
+      background: url(img/icons/icon-other.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-fire-false-alarm {
+      background: url(img/icons/icon-fire-false-alarm.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-hazchem {
+      background: url(img/icons/icon-hazchem.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-rescue {
+      background: url(img/icons/icon-rescue.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-fire-planned {
+      background: url(img/icons/icon-fire-planned.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-ses {
+      background: url(img/icons/icon-ses.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-building-fire {
+      background: url(img/icons/icon-building-fire.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-animal {
+      background: url(img/icons/icon-animal.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-fire-alarm {
+      background: url(img/icons/icon-fire-alarm.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-tree {
+      background: url(img/icons/icon-tree.png) no-repeat center center;
+      background-size: contain;
+    }
+    .icon-medical-emergency {
+      background: url(img/icons/icon-medical-emergency.png) no-repeat center center;
+      background-size: contain;
+    }
+    .item-title {
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .item-desc {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.3;
+      margin: 4px 0 0 0;
+      padding: 0 30px 0 0;
+    }
+    .item-label {
+      font-size: 12px;
+      color: #999;
+      float: right;
+    }
+    .header.warning, .header.incidents {
+      padding: 0.6em;
+      font-size: 1.1em;
+      border-top: solid 2px #777;
+      border-bottom: solid 2px #777;
+      box-shadow: #000 3px 2px 0;
+    }
+    .header.warning {
+      background-color: #ffef84;
+    }
+    .item.warning {
+      background-color: #fcffc8;
+    }
+    .angular-leaflet-map {
+      width: 100%;
+      height: 200px;
+    }
+    .loading {
+      text-align: center;
+      padding: 4em 2em;
+    }
+    .loading .item-thum {
+      display: inline-block;
+    }
+    .loading header {
+      margin-top: 1em;
+    }
+
+    .details-container header .item-title {
+      padding: 0.5em 0.3em;
+    }
+    .details-container header .time {
+      padding: 0.5em 0.3em;
+    }
+  </style>
+</head>
+
+<body ng-controller="AppController">    
+
+  <ons-navigator>
+    <ons-page>
+      <ons-toolbar>
+        <div class="center">Warnings and Incidents</div>
+        <div class="right">
+          <ons-toolbar-button>
+            <ons-icon icon="refresh" ng-click="refresh()"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+      </ons-toolbar>
+
+      <ons-page modifier="chevron" ng-hide="incidents || errorLoading">
+        <div class="loading">
+          <ons-icon icon="ion-loading-c" spin="true"></ons-icon>
+          <header>
+            Loading list of incidents
+          </header>
+        </div>
+      </ons-page>
+
+      <ons-page modifier="chevron" ng-show="errorLoading">
+        <div class="loading">
+          <div class="item-thum icon-fire"></div>
+          <header>
+            Error loading incidents
+          </header>
+          <p>
+            This may be because your internet is not connected, or there is a problem with
+            <a href="http://www.emergency.vic.gov.au">http://www.emergency.vic.gov.au</a>.
+            If you can load that website in the browser, then there is an issue with this
+            app. Please report any issues at
+            <a href="https://github.com/pserwylo/vic-emergencies/issues">https://github.com/pserwylo/vic-emergencies</a>.
+          </p>
+        </div>
+      </ons-page>
+
+      <ons-list ng-controller="MasterController">
+
+        <ons-list-header class="header warning">
+          Warnings ({{ warnings.length }})
+        </ons-list-header>
+
+        <!--| orderBy: 'severity' : reverse-->
+        <ons-list-item
+            modifier="chevron"
+            class="item warning"
+            ng-repeat="item in warnings | filter: { state: 'vic' }">
+          <ons-row ng-click="showWarningDetail(item)">
+            <ons-col width="60px">
+              <div class="item-thum {{ item.getIcon() }}"></div>
+            </ons-col>
+            <ons-col>
+              <header>
+                <span class="item-title">{{ item.name }} {{ item.getAdviceType() }}</span>
+                <span class="item-label">{{item.getLastUpdatedString()}} ago</span>
+              </header>
+              <p class="item-desc">{{item.getAllLocationsString()}}</p>
+            </ons-col>
+          </ons-row>                          
+        </ons-list-item>
+
+        <ons-list-header class="header incidents">
+          Incidents ({{ incidents.length }})
+        </ons-list-header>
+
+        <ons-list-item
+            modifier="chevron"
+            class="item incidents"
+            style="background-color: {{ item.getStatusColour() }}"
+            ng-repeat="item in incidents | filter: { state: 'vic' }">
+          <ons-row ng-click="showIncidentDetail(item)">
+            <ons-col width="60px">
+              <div class="item-thum {{ item.getIcon() }}"></div>
+            </ons-col>
+            <ons-col>
+              <header>
+                <span class="item-title">{{item.getName()}}</span>
+                <span class="item-label">{{item.getLastUpdatedString()}} ago</span>
+              </header>
+              <p class="item-desc">{{item.getAllLocationsString()}}</p>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+
+      </ons-list>
+    </ons-page>
+  </ons-navigator>
+
+  <ons-template id="warning.html">
+    <ons-page ng-controller="WarningController">
+
+      <ons-toolbar>
+        <div class="left"><ons-back-button>Back</ons-back-button></div>
+        <div class="center">
+          <div class="toolbar item-thum {{ item.getIcon() }}"></div>
+          Advice from the {{ item.getAgencyShort() }}
+        </div>
+      </ons-toolbar>
+      <iframe
+        src="{{ item.getWarningUrl() }}"
+        style="width: 100%; height: 100%">
+
+      </iframe>
+    </ons-page>
+
+
+  </ons-template>
+
+  <ons-template id="detail.html">
+    <ons-page ng-controller="DetailController" class="details-container">
+
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">
+          <div class="toolbar"></div>
+           {{ item.getName() }} in {{ item.getLocation().name }}
+        </div>
+      </ons-toolbar>
+
+      <div id="map-container">
+
+        <leaflet
+          tiles="tiles"
+          center="mapLocation"
+          markers="markers"
+          geojson="geojson">
+        </leaflet>
+
+      </div>
+
+      <ons-list modifier="inset" style="margin-top: 10px">
+        <ons-list-item class="item">
+          <ons-row>
+            <ons-col width="60px"> 
+              <div class="item-thum {{ item.getIcon() }}"></div>
+            </ons-col>
+            <ons-col>
+              <header>
+
+                <div class="item-label">
+                  <div class="time" ng-if="item.updatedTime == item.createdTime">
+                    {{ item.getLastUpdatedString() }} ago
+                  </div>
+                  <div class="time" ng-if="item.updatedTime != item.createdTime">
+                    Updated: {{ item.getLastUpdatedString() }} ago
+                  </div>
+                  <div class="time" ng-if="item.updatedTime != item.createdTime">
+                    Created: {{ item.getCreatedString() }} ago
+                  </div>
+                </div>
+
+                <div class="item-title">{{ item.getName() }}</div>
+                <div class="item-title">{{ item.getLocation().getNameFull() }}</div>
+
+              </header>
+              <p class="item-desc">
+                <strong>Agency: </strong> {{item.agency}}
+              </p>
+              <p class="item-desc">
+                <strong>Status: </strong> {{item.status}}
+              </p>
+              <p class="item-desc">
+                <strong>Size: </strong> {{item.size}}
+                <span ng-if="item.sizeHa">
+                  ({{ item.sizeHa }}ha)
+                </span>
+              </p>
+              <p class="item-desc">
+                <strong>Resources: </strong> {{item.resourceCount}}
+              </p>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+
+      </ons-list>
+
+      <br>
+
+    </ons-page>
+  </ons-template>
+
+</body>  
+</html>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.serwylo.vicemergencies" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <preference name="loglevel" value="DEBUG" />
+    <name>Vic Emergencies</name>
+    <description>
+        http://www.emergency.vic.gov.au
+    </description>
+    <author email="peter@serwylo.com" href="https://github.com/pserwylo/vic-emergencies">
+        Peter Serwylo
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <icon height="72" platform="android" src="assets/app-icon.png" width="72" />
+</widget>
