@@ -31,8 +31,37 @@
         }
     };
 
+    /**
+     * Arbitrary measurement of distance between two locations.
+     * Not kms, not anything specific - it is the calculation of:
+     *
+     *   sqrt( delta lat ^ 2 + delta y ^ 2 )
+     */
+    Location.prototype.getDistanceTo = function( location ) {
+        var x = location.latitude  - this.latitude;
+        var y = location.longitude -  this.longitude;
+        return Math.sqrt( x * x + y * y );
+    };
+
+    Location.prototype.getMidPoint = function( location ) {
+        var x = location.latitude  - this.latitude;
+        var y = location.longitude -  this.longitude;
+        return new Location({
+            latitude: location.latitude - x / 2,
+            longitude: location.longitude - y / 2
+        });
+    };
+
     Location.UNKNOWN = new Location({
-        name: "Unknown"
+        name: "Unknown",
+        latitude: "-37.8136",
+        longitude: "144.9631"
+    });
+
+    Location.MELBOURNE = new Location({
+        name: "Melbourne",
+        latitude: "-37.8136",
+        longitude: "144.9631"
     });
 
     var Event = function( data ) {
@@ -303,14 +332,24 @@
             // var feedLink = 'file:///home/pete/code/vic-emergencies/www/js/feed.json';
             $http.get( feedLink ).success(function (data) {
 
+                var excludeEvent = function( event ) {
+                    return ( event.state != "VIC" );
+                };
+
                 var warnings = [];
                 var incidents = [];
                 for (var i = 0; i < data.events.length; i++) {
                     var item = data.events[i];
                     if ( item.hasOwnProperty( 'title' ) ) {
-                        incidents.push( new Event.Incident( item ) );
+                        var incident = new Event.Incident( item );
+                        if ( !excludeEvent( incident ) ) {
+                            incidents.push( incident );
+                        }
                     } else {
-                        warnings.push( new Event.Warning( item ) );
+                        var warning = new Event.Warning( item );
+                        if ( !excludeEvent( warning ) ) {
+                            warnings.push( new Event.Warning( item ) );
+                        }
                     }
                 }
                 $scope.incidents = incidents;
@@ -335,17 +374,31 @@
 
         $scope.tiles = {
             url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            // url: "file:///home/pete/code/vic-emergencies/www/tiles2/{z}/{x}/{y}.png",
             options: {
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }
         };
 
         var loc = $scope.item.getLocation();
+        var distance = loc.getDistanceTo( Location.MELBOURNE );
+        var mid = loc.getMidPoint( Location.MELBOURNE );
+
+        var zoom = 6;
+        if ( distance > 1.6 ) {
+            zoom = 5;
+        } else if ( distance > 1.4 ) {
+            zoom = 6;
+        } else if ( distance > 1 ) {
+            zoom = 7;
+        } else {
+            zoom = 8;
+        }
 
         $scope.mapLocation = {
-            lat: loc.latitude,
-            lng: loc.longitude,
-            zoom: 6
+            lat: mid.latitude,
+            lng: mid.longitude,
+            zoom: zoom
         };
 
         $scope.markers = {

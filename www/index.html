@@ -147,6 +147,10 @@
       color: #999;
       float: right;
     }
+    .item-desc .status {
+      display: inline-block;
+      padding: 0.3em 0.6em;
+    }
     .header.warning, .header.incidents {
       padding: 0.6em;
       font-size: 1.1em;
@@ -174,7 +178,6 @@
     .loading header {
       margin-top: 1em;
     }
-
     .details-container header .item-title {
       padding: 0.5em 0.3em;
     }
@@ -214,10 +217,10 @@
           </header>
           <p>
             This may be because your internet is not connected, or there is a problem with
-            <a href="http://www.emergency.vic.gov.au">http://www.emergency.vic.gov.au</a>.
+            <a href="http://www.emergency.vic.gov.au" target="_blank">http://www.emergency.vic.gov.au</a>.
             If you can load that website in the browser, then there is an issue with this
             app. Please report any issues at
-            <a href="https://github.com/pserwylo/vic-emergencies/issues">https://github.com/pserwylo/vic-emergencies</a>.
+            <a href="https://github.com/pserwylo/vic-emergencies/issues" target="_blank">https://github.com/pserwylo/vic-emergencies</a>.
           </p>
         </div>
       </ons-page>
@@ -232,7 +235,7 @@
         <ons-list-item
             modifier="chevron"
             class="item warning"
-            ng-repeat="item in warnings | filter: { state: 'vic' }">
+            ng-repeat="item in warnings">
           <ons-row ng-click="showWarningDetail(item)">
             <ons-col width="60px">
               <div class="item-thum {{ item.getIcon() }}"></div>
@@ -255,7 +258,7 @@
             modifier="chevron"
             class="item incidents"
             style="background-color: {{ item.getStatusColour() }}"
-            ng-repeat="item in incidents | filter: { state: 'vic' }">
+            ng-repeat="item in incidents">
           <ons-row ng-click="showIncidentDetail(item)">
             <ons-col width="60px">
               <div class="item-thum {{ item.getIcon() }}"></div>
@@ -347,7 +350,7 @@
                 <strong>Agency: </strong> {{item.agency}}
               </p>
               <p class="item-desc">
-                <strong>Status: </strong> {{item.status}}
+                <strong>Status: </strong> <span class="status" style="background-color: {{ item.getStatusColour() }}">{{item.status}}</span>
               </p>
               <p class="item-desc">
                 <strong>Size: </strong> {{item.size}}
