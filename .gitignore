@@ -10,9 +10,11 @@ ping/data/*
 *.ap_
 *.dex
 *.class
+platforms/browser
 platforms/android/bin/
 platforms/android/gen/
 platforms/android/assets/
+platforms/android/ant-build/
 bin/
 gen/
 local.properties

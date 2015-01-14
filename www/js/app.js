@@ -413,24 +413,13 @@
             }
         };
 
-        /*
-        $http.get( "maps/vic.geojson" ).success( function( data, status ) {
-
-            angular.extend($scope, {
-                geojson: {
-                    data: data,
-                    clickable: false,
-                    style: function( feature ) {
-                        return {
-                            color: "#F33",
-                            weight: 3,
-                            fillColor: "#FFF",
-                            fillOpacity: 0.0
-                        }
-                    }
-                }
-            });
-        });*/
+        $scope.$on('leafletDirectiveMarker.click', function( e, args ) {
+            $scope.mapLocation = {
+                lat: loc.latitude,
+                lng: loc.longitude,
+                zoom: 14
+            }
+        });
 
     });
 
