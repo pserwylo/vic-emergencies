@@ -12,7 +12,7 @@
         Peter Serwylo
     </author>
     <content src="index.html" />
-    
+
     <access origin="http://www.emergency.vic.gov.au/warnings/*" />
     <access origin="http://www.emergency.vic.gov.au/feed/feed.json" />
     <access origin="https://*.tile.openstreetmap.org/*" />

@@ -20,14 +20,11 @@
   <script src="lib/angular-leaflet-directive.min.js"></script>
 
   <script src="cordova.js"></script>
+  <script src="js/classes.js"></script><!-- Has to be before js/app.js -->
   <script src="js/app.js"></script>
 
   <script>
-    ons.ready(function() {
-
-
-
-    });
+    ons.ready(function() {});
   </script>
 
   <style>
@@ -257,7 +254,7 @@
               </header>
               <p class="item-desc">{{item.getAllLocationsString()}}</p>
             </ons-col>
-          </ons-row>                          
+          </ons-row>
         </ons-list-item>
 
         <ons-list-header class="header incidents">
@@ -286,167 +283,6 @@
       </ons-list>
     </ons-page>
   </ons-navigator>
-
-  <ons-template id="warning.html">
-    <ons-page ng-controller="WarningController">
-
-      <ons-toolbar>
-        <div class="left"><ons-back-button>Back</ons-back-button></div>
-        <div class="center">
-          <div class="toolbar item-thum {{ item.getIcon() }}"></div>
-          Advice from the {{ item.getAgencyShort() }}
-        </div>
-      </ons-toolbar>
-      <iframe
-        src="{{ item.getWarningUrl() }}"
-        style="width: 100%; height: 100%">
-
-      </iframe>
-    </ons-page>
-
-
-  </ons-template>
-
-  <ons-template id="detail.html">
-    <ons-page ng-controller="DetailController" class="details-container">
-
-      <ons-toolbar>
-        <div class="left">
-          <ons-back-button>Back</ons-back-button>
-        </div>
-        <div class="center">
-          <div class="toolbar"></div>
-           {{ item.getName() }} in {{ item.getLocation().name }}
-        </div>
-      </ons-toolbar>
-
-      <div id="map-container">
-
-        <leaflet
-          tiles="tiles"
-          center="mapLocation"
-          markers="markers"
-          geojson="geojson">
-        </leaflet>
-
-      </div>
-
-      <ons-list modifier="inset" style="margin-top: 10px">
-        <ons-list-item class="item">
-          <ons-row>
-            <ons-col width="60px"> 
-              <div class="item-thum {{ item.getIcon() }}"></div>
-            </ons-col>
-            <ons-col>
-              <header>
-
-                <div class="item-label">
-                  <div class="time" ng-if="item.updatedTime == item.createdTime">
-                    {{ item.getLastUpdatedString() }} ago
-                  </div>
-                  <div class="time" ng-if="item.updatedTime != item.createdTime">
-                    Updated: {{ item.getLastUpdatedString() }} ago
-                  </div>
-                  <div class="time" ng-if="item.updatedTime != item.createdTime">
-                    Created: {{ item.getCreatedString() }} ago
-                  </div>
-                </div>
-
-                <div class="item-title">{{ item.getName() }}</div>
-                <div class="item-title">{{ item.getLocation().getNameFull() }}</div>
-
-              </header>
-              <p class="item-desc">
-                <strong>Agency: </strong> {{item.agency}}
-              </p>
-              <p class="item-desc">
-                <strong>Status: </strong> <span class="status" style="background-color: {{ item.getStatusColour() }}">{{item.status}}</span>
-              </p>
-              <p class="item-desc">
-                <strong>Size: </strong> {{item.size}}
-                <span ng-if="item.sizeHa">
-                  ({{ item.sizeHa }}ha)
-                </span>
-              </p>
-              <p class="item-desc">
-                <strong>Resources: </strong> {{item.resourceCount}}
-              </p>
-            </ons-col>
-          </ons-row>
-        </ons-list-item>
-
-      </ons-list>
-
-      <br>
-
-    </ons-page>
-  </ons-template>
-
-  <ons-template id="settings.html">
-    <ons-page ng-controller="SettingsController" id="settings-page">
-
-      <ons-toolbar>
-        <div class="left">
-          <ons-back-button>Back</ons-back-button>
-        </div>
-        <div class="center">
-          <div class="toolbar"></div>
-           Settings
-        </div>
-      </ons-toolbar>
-
-      <ons-list modifier="chevron" class="settings-list">
-        <ons-list-header>
-          Filter incidents/warnings
-        </ons-list-header>
-        <ons-list-item>
-          <ons-row>
-            <ons-col>
-              <header>
-                <div class="item-label"></div>
-                <div class="item-title">Include NSW + SA</div>
-              </header>
-              <p class="item-desc">Show warnings and incidents from NSW + SA as well as Vic.</p>
-            </ons-col>
-            <ons-col class="switch-container" width="60px">
-              <ons-switch ng-model="settings.filter.nswSa"></ons-switch>
-            </ons-col>
-          </ons-row>
-        </ons-list-item>
-        <ons-list-item>
-          <ons-row>
-            <ons-col>
-              <header>
-                <div class="item-label"></div>
-                <div class="item-title">Show "Safe" incidents</div>
-              </header>
-              <p class="item-desc">Include incidents declared safe in the list.</p>
-            </ons-col>
-            <ons-col class="switch-container" width="60px">
-              <ons-switch ng-model="settings.filter.safe"></ons-switch>
-            </ons-col>
-          </ons-row>
-        </ons-list-item>
-        <ons-list-item>
-          <ons-row>
-            <ons-col>
-              <header>
-                <div class="item-label"></div>
-                <div class="item-title">Show "False Alarms"</div>
-              </header>
-              <p class="item-desc">Include false alarms in the list (must have 'Show "Safe" incidents' enabled).</p>
-            </ons-col>
-            <ons-col class="switch-container" width="60px">
-              <ons-switch
-                ng-model="settings.filter.falseAlarms"
-                ng-disabled="!settings.filter.safe"></ons-switch>
-            </ons-col>
-          </ons-row>
-        </ons-list-item>
-      </ons-list>
-
-    </ons-page>
-  </ons-template>
 
 </body>  
 </html>

@@ -1,0 +1,72 @@
+<ons-page ng-controller="DetailController" class="details-container">
+
+    <ons-toolbar>
+        <div class="left">
+            <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">
+            <div class="toolbar"></div>
+            {{ item.getName() }} in {{ item.getLocation().name }}
+        </div>
+    </ons-toolbar>
+
+    <div id="map-container">
+
+        <leaflet
+                tiles="tiles"
+                center="mapLocation"
+                markers="markers"
+                geojson="geojson">
+        </leaflet>
+
+    </div>
+
+    <ons-list modifier="inset" style="margin-top: 10px">
+        <ons-list-item class="item">
+            <ons-row>
+                <ons-col width="60px">
+                    <div class="item-thum {{ item.getIcon() }}"></div>
+                </ons-col>
+                <ons-col>
+                    <header>
+
+                        <div class="item-label">
+                            <div class="time" ng-if="item.updatedTime == item.createdTime">
+                                {{ item.getLastUpdatedString() }} ago
+                            </div>
+                            <div class="time" ng-if="item.updatedTime != item.createdTime">
+                                Updated: {{ item.getLastUpdatedString() }} ago
+                            </div>
+                            <div class="time" ng-if="item.updatedTime != item.createdTime">
+                                Created: {{ item.getCreatedString() }} ago
+                            </div>
+                        </div>
+
+                        <div class="item-title">{{ item.getName() }}</div>
+                        <div class="item-title">{{ item.getLocation().getNameFull() }}</div>
+
+                    </header>
+                    <p class="item-desc">
+                        <strong>Agency: </strong> {{item.agency}}
+                    </p>
+                    <p class="item-desc">
+                        <strong>Status: </strong> <span class="status" style="background-color: {{ item.getStatusColour() }}">{{item.status}}</span>
+                    </p>
+                    <p class="item-desc">
+                        <strong>Size: </strong> {{item.size}}
+            <span ng-if="item.sizeHa">
+              ({{ item.sizeHa }}ha)
+            </span>
+                    </p>
+                    <p class="item-desc">
+                        <strong>Resources: </strong> {{item.resourceCount}}
+                    </p>
+                </ons-col>
+            </ons-row>
+        </ons-list-item>
+
+    </ons-list>
+
+    <br>
+
+</ons-page>
