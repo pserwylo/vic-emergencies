@@ -9,6 +9,11 @@
         Peter Serwylo
     </author>
     <content src="index.html" />
-    <access origin="*" />
+    <access origin="http://www.emergency.vic.gov.au/warnings/*" />
+    <access origin="http://www.emergency.vic.gov.au/feed/feed.json" />
+    <access origin="https://*.tile.openstreetmap.org/*" />
+    <access launch-external="yes" origin="http://www.emergency.vic.gov.au/*" />
+    <access launch-external="yes" origin="https://github.com/pserwylo/vic-emergencies/*" />
+    <access launch-external="yes" origin="https://www.openstreetmap.org/copyright" />
     <icon height="72" platform="android" src="assets/app-icon.png" width="72" />
 </widget>
