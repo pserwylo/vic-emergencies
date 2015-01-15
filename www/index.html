@@ -184,6 +184,13 @@
     .details-container header .time {
       padding: 0.5em 0.3em;
     }
+    .title {
+      overflow: hidden;
+    }
+
+    .switch-container {
+      padding: 10px 0;
+    }
   </style>
 </head>
 
@@ -192,10 +199,13 @@
   <ons-navigator>
     <ons-page>
       <ons-toolbar>
-        <div class="center">Warnings and Incidents</div>
+        <div class="center title">Warnings/Incidents</div>
         <div class="right">
           <ons-toolbar-button>
             <ons-icon icon="refresh" ng-click="refresh()"></ons-icon>
+          </ons-toolbar-button>
+          <ons-toolbar-button>
+            <ons-icon icon="bars" ng-click="showMenu()"></ons-icon>
           </ons-toolbar-button>
         </div>
       </ons-toolbar>
@@ -228,14 +238,14 @@
       <ons-list ng-controller="MasterController">
 
         <ons-list-header class="header warning">
-          Warnings ({{ warnings.length }})
+          Warnings ({{ filteredWarnings.length }})
         </ons-list-header>
 
         <!--| orderBy: 'severity' : reverse-->
         <ons-list-item
             modifier="chevron"
             class="item warning"
-            ng-repeat="item in warnings">
+            ng-repeat="item in filteredWarnings = ( warnings | filter : filterWarnings )">
           <ons-row ng-click="showWarningDetail(item)">
             <ons-col width="60px">
               <div class="item-thum {{ item.getIcon() }}"></div>
@@ -251,14 +261,14 @@
         </ons-list-item>
 
         <ons-list-header class="header incidents">
-          Incidents ({{ incidents.length }})
+          Incidents ({{ filteredIncidents.length }})
         </ons-list-header>
 
         <ons-list-item
             modifier="chevron"
             class="item incidents"
             style="background-color: {{ item.getStatusColour() }}"
-            ng-repeat="item in incidents">
+            ng-repeat="item in filteredIncidents = ( incidents | filter: filterIncidents )">
           <ons-row ng-click="showIncidentDetail(item)">
             <ons-col width="60px">
               <div class="item-thum {{ item.getIcon() }}"></div>
@@ -368,6 +378,72 @@
       </ons-list>
 
       <br>
+
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="settings.html">
+    <ons-page ng-controller="SettingsController" id="settings-page">
+
+      <ons-toolbar>
+        <div class="left">
+          <ons-back-button>Back</ons-back-button>
+        </div>
+        <div class="center">
+          <div class="toolbar"></div>
+           Settings
+        </div>
+      </ons-toolbar>
+
+      <ons-list modifier="chevron" class="settings-list">
+        <ons-list-header>
+          Filter incidents/warnings
+        </ons-list-header>
+        <ons-list-item>
+          <ons-row>
+            <ons-col>
+              <header>
+                <div class="item-label"></div>
+                <div class="item-title">Include NSW + SA</div>
+              </header>
+              <p class="item-desc">Show warnings and incidents from NSW + SA as well as Vic.</p>
+            </ons-col>
+            <ons-col class="switch-container" width="60px">
+              <ons-switch ng-model="settings.filter.nswSa"></ons-switch>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+        <ons-list-item>
+          <ons-row>
+            <ons-col>
+              <header>
+                <div class="item-label"></div>
+                <div class="item-title">Show "Safe" incidents</div>
+              </header>
+              <p class="item-desc">Include incidents declared safe in the list.</p>
+            </ons-col>
+            <ons-col class="switch-container" width="60px">
+              <ons-switch ng-model="settings.filter.safe"></ons-switch>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+        <ons-list-item>
+          <ons-row>
+            <ons-col>
+              <header>
+                <div class="item-label"></div>
+                <div class="item-title">Show "False Alarms"</div>
+              </header>
+              <p class="item-desc">Include false alarms in the list (must have 'Show "Safe" incidents' enabled).</p>
+            </ons-col>
+            <ons-col class="switch-container" width="60px">
+              <ons-switch
+                ng-model="settings.filter.falseAlarms"
+                ng-disabled="!settings.filter.safe"></ons-switch>
+            </ons-col>
+          </ons-row>
+        </ons-list-item>
+      </ons-list>
 
     </ons-page>
   </ons-template>

@@ -10,6 +10,25 @@
             ]);
         });
 
+    var loadSettings = function() {
+
+        var saved = localStorage.getItem( 'settings' );
+
+        if ( !!saved ) {
+            return JSON.parse( saved );
+        }
+
+        return {
+            filter: {
+                nswSa: false,
+                falseAlarms: true,
+                safe: true
+            }
+        }
+    };
+
+    var settings = loadSettings();
+
     var Location = function( source ) {
 
         this.name = source.name;
@@ -147,10 +166,12 @@
         }
     };
 
+    Event.prototype.isSafe = function() {
+        return this.status === "Safe" || this.status === "Complete" || this.status === "Patrolled";
+    };
+
     Event.prototype.getStatusColour = function() {
-        if ( this.status == "Safe"
-            || this.status == "Complete"
-            || this.status == "Patrolled" ) {
+        if ( this.isSafe() ) {
             return "#efe";
         } else if ( this.status == "Under Control" ) {
             return "#eef";
@@ -332,30 +353,22 @@
             // var feedLink = 'file:///home/pete/code/vic-emergencies/www/js/feed.json';
             $http.get( feedLink ).success(function (data) {
 
-                var excludeEvent = function( event ) {
-                    return ( event.state != "VIC" );
-                };
-
                 var warnings = [];
                 var incidents = [];
+
                 for (var i = 0; i < data.events.length; i++) {
                     var item = data.events[i];
                     if ( item.hasOwnProperty( 'title' ) ) {
-                        var incident = new Event.Incident( item );
-                        if ( !excludeEvent( incident ) ) {
-                            incidents.push( incident );
-                        }
+                        incidents.push( new Event.Incident( item ) );
                     } else {
-                        var warning = new Event.Warning( item );
-                        if ( !excludeEvent( warning ) ) {
-                            warnings.push( new Event.Warning( item ) );
-                        }
+                        warnings.push( new Event.Warning( item ) );
                     }
                 }
+
                 $scope.incidents = incidents;
                 $scope.warnings = warnings;
 
-            }).error(function (data) {
+            }).error(function () {
                 $scope.errorLoading = true;
             });
         };
@@ -364,11 +377,44 @@
             loadIncidents();
         };
 
+        $scope.showMenu = function() {
+            $scope.ons.navigator.pushPage( 'settings.html' );
+        };
+
+        $scope.filterWarnings = function( warning ) {
+            var isNswSa = function() {
+                return warning.state != "VIC";
+            };
+
+            return settings.filter.nswSa || !isNswSa();
+        };
+
+        $scope.filterIncidents = function( event ) {
+
+            var isNswSa = function() {
+                return event.state != "VIC";
+            };
+
+            var isFalseAlarm = function() {
+                return event.name == "False Alarm";
+            };
+
+            if ( !settings.filter.nswSa && isNswSa() ) {
+                return false;
+            } else if ( !settings.filter.safe && event.isSafe() ) {
+                return false;
+            } else if ( !settings.filter.falseAlarms && isFalseAlarm() ) {
+                return false;
+            } else {
+                return true;
+            }
+        };
+
         loadIncidents();
 
     });
 
-    module.controller('DetailController', function ($scope, $data, $http) {
+    module.controller('DetailController', function ($scope, $data) {
         $scope.item = $data.selectedItem;
         console.log( $scope.item );
 
@@ -413,13 +459,27 @@
             }
         };
 
-        $scope.$on('leafletDirectiveMarker.click', function( e, args ) {
+        $scope.$on('leafletDirectiveMarker.click', function() {
             $scope.mapLocation = {
                 lat: loc.latitude,
                 lng: loc.longitude,
                 zoom: 14
             }
         });
+
+    });
+
+    module.controller('SettingsController', function ($scope) {
+
+        $scope.settings = settings;
+
+        var saveSettings = function() {
+            localStorage.setItem( 'settings', JSON.stringify( settings ) );
+        };
+
+        $scope.$watch( 'settings.filter.nswSa', saveSettings);
+        $scope.$watch( 'settings.filter.safe', saveSettings);
+        $scope.$watch( 'settings.filter.falseAlarms', saveSettings);
 
     });
 

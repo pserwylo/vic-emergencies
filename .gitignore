@@ -12,6 +12,7 @@ ping/data/*
 *.class
 platforms/browser
 platforms/android/bin/
+platforms/android/CordovaLib/ant-build
 platforms/android/gen/
 platforms/android/assets/
 platforms/android/ant-build/
