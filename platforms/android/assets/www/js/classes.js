@@ -9,7 +9,7 @@ VicEm.Settings = function() {
     };
 
     var savedFilters = localStorage.getItem( 'settings.filters' );
-    if ( savedFilters !== "undefined" && savedFilters !== null ) {
+    if ( savedFilters !== "undefined" ) {
         this.filters = JSON.parse( savedFilters );
     }
 
@@ -189,10 +189,6 @@ VicEm.Event.prototype.getLocation = function() {
 
 VicEm.Event.prototype.getName = function() {
     return this.name;
-};
-
-VicEm.Event.prototype.getAllLocations = function() {
-    return this.locations;
 };
 
 VicEm.Event.prototype.getAllLocationsString = function() {

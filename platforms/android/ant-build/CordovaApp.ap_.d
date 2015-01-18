@@ -30,6 +30,7 @@
 /home/pete/code/vic-emergencies/platforms/android/assets/www/img \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/css \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/styles \
+/home/pete/code/vic-emergencies/platforms/android/assets/www/templates \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/lib \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/js \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/maps/vic.geojson \
@@ -77,6 +78,9 @@
 /home/pete/code/vic-emergencies/platforms/android/assets/www/styles/onsen-css-components-purple-theme.css \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/styles/app.css \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/styles/onsen-css-components-dark-theme.css \
+/home/pete/code/vic-emergencies/platforms/android/assets/www/templates/settings.html \
+/home/pete/code/vic-emergencies/platforms/android/assets/www/templates/warning.html \
+/home/pete/code/vic-emergencies/platforms/android/assets/www/templates/detail.html \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/lib/leaflet \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/lib/angular-leaflet-directive.min.js \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/lib/onsen \
@@ -165,6 +169,7 @@
 /home/pete/code/vic-emergencies/platforms/android/assets/www/lib/onsen/js/angular/angular-animate.js \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/lib/font-awesome/font-awesome.min.css \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/lib/font-awesome/font-awesome.css \
+/home/pete/code/vic-emergencies/platforms/android/assets/www/js/classes.js \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/js/feed.json \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/js/app.js \
 /home/pete/code/vic-emergencies/platforms/android/assets/www/js/index.js \

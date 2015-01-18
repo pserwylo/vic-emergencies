@@ -11,24 +11,7 @@ var VicEm = VicEm || {};
             ]);
         });
 
-    var loadSettings = function() {
-
-        var saved = localStorage.getItem( 'settings' );
-
-        if ( !!saved ) {
-            return JSON.parse( saved );
-        }
-
-        return {
-            filter: {
-                nswSa: false,
-                falseAlarms: true,
-                safe: true
-            }
-        }
-    };
-
-    var settings = loadSettings();
+    var settings = new VicEm.Settings();
 
     module.controller('AppController', function ($scope, $http) {
 
@@ -75,7 +58,7 @@ var VicEm = VicEm || {};
                 return warning.state != "VIC";
             };
 
-            return settings.filter.nswSa || !isNswSa();
+            return settings.filters.nswSa || !isNswSa();
         };
 
         $scope.filterIncidents = function( event ) {
@@ -88,11 +71,11 @@ var VicEm = VicEm || {};
                 return event.name == "False Alarm";
             };
 
-            if ( !settings.filter.nswSa && isNswSa() ) {
+            if ( !settings.filters.nswSa && isNswSa() ) {
                 return false;
-            } else if ( !settings.filter.safe && event.isSafe() ) {
+            } else if ( !settings.filters.safe && event.isSafe() ) {
                 return false;
-            } else if ( !settings.filter.falseAlarms && isFalseAlarm() ) {
+            } else if ( !settings.filters.falseAlarms && isFalseAlarm() ) {
                 return false;
             } else {
                 return true;
@@ -103,22 +86,18 @@ var VicEm = VicEm || {};
 
     });
 
-    module.controller('DetailController', function ($scope, $data) {
-        $scope.item = $data.selectedItem;
-        console.log( $scope.item );
-
-        $scope.tiles = {
+    var mapTiles = function() {
+        return {
             url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             // url: "file:///home/pete/code/vic-emergencies/www/tiles2/{z}/{x}/{y}.png",
             options: {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }
         };
+    };
 
-        var loc = $scope.item.getLocation();
-        var distance = loc.getDistanceTo( VicEm.Location.MELBOURNE );
-        var mid = loc.getMidPoint( VicEm.Location.MELBOURNE );
-
+    var mapZoom = function( location ) {
+        var distance = location.getDistanceTo( VicEm.Location.MELBOURNE );
         var zoom = 6;
         if ( distance > 1.6 ) {
             zoom = 5;
@@ -129,23 +108,38 @@ var VicEm = VicEm || {};
         } else {
             zoom = 8;
         }
+        return zoom;
+    };
+
+    var mapMarker = function( location, icon ) {
+        return {
+            icon : {
+                type: 'div',
+                iconSize: [ 46, 46 ],
+                className: 'marker ' + icon
+            },
+            lat: location.latitude,
+            lng: location.longitude
+        }
+    };
+
+    module.controller('DetailController', function ($scope, $data) {
+        $scope.item = $data.selectedItem;
+        console.log( $scope.item );
+
+        $scope.tiles = mapTiles();
+
+        var loc = $scope.item.getLocation();
+        var mid = loc.getMidPoint( VicEm.Location.MELBOURNE );
 
         $scope.mapLocation = {
             lat: mid.latitude,
             lng: mid.longitude,
-            zoom: zoom
+            zoom: mapZoom( loc )
         };
 
         $scope.markers = {
-            incident : {
-                icon : {
-                    type: 'div',
-                    iconSize: [ 46, 46 ],
-                    className: 'marker ' + $scope.item.getIcon()
-                },
-                lat: loc.latitude,
-                lng: loc.longitude
-            }
+            incident : mapMarker( loc, $scope.item.getIcon() )
         };
 
         $scope.$on('leafletDirectiveMarker.click', function() {
@@ -162,19 +156,52 @@ var VicEm = VicEm || {};
 
         $scope.settings = settings;
 
-        var saveSettings = function() {
-            localStorage.setItem( 'settings', JSON.stringify( settings ) );
+        var save = function() {
+            $scope.settings.save();
         };
 
-        $scope.$watch( 'settings.filter.nswSa', saveSettings);
-        $scope.$watch( 'settings.filter.safe', saveSettings);
-        $scope.$watch( 'settings.filter.falseAlarms', saveSettings);
+        $scope.$watch( 'settings.filters.nswSa', save);
+        $scope.$watch( 'settings.filters.falseAlarms', save);
+        $scope.$watch( 'settings.filters.safe', function() {
+            if ( !$scope.settings.filters.safe ) {
+                $scope.settings.filters.falseAlarms = false;
+            }
+            save();
+        });
 
     });
 
     module.controller('WarningController', function ($scope, $data) {
+        
         $scope.item = $data.selectedItem;
         console.log( $scope.item );
+
+        $scope.tiles = mapTiles();
+
+        var loc = $scope.item.getLocation();
+        var mid = loc.getMidPoint( VicEm.Location.MELBOURNE );
+
+        $scope.mapLocation = {
+            lat: mid.latitude,
+            lng: mid.longitude,
+            zoom: mapZoom( loc )
+        };
+
+        $scope.markers = [];
+
+        var locs = $scope.item.getAllLocations();
+        for ( var i = 0; i < locs.length; i ++ ) {
+            $scope.markers.push( mapMarker( locs[ i ], $scope.item.getIcon() ) )
+        }
+
+        $scope.$on('leafletDirectiveMarker.click', function(event) {
+            console.log( event );
+            $scope.mapLocation = {
+                lat: loc.latitude,
+                lng: loc.longitude,
+                zoom: 9
+            }
+        });
     });
 
     module.controller('MasterController', function ($scope, $data) {

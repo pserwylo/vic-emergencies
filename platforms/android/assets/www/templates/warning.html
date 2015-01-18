@@ -7,22 +7,10 @@
             Advice from the {{ item.getAgencyShort() }}
         </div>
     </ons-toolbar>
-
-    <div id="map-container">
-
-        <leaflet
-            tiles="tiles"
-            center="mapLocation"
-            markers="markers">
-        </leaflet>
-
-    </div>
-
     <iframe
         src="{{ item.getWarningUrl() }}"
         style="width: 100%; height: 100%"
         frameborder="0">
 
     </iframe>
-
 </ons-page>
